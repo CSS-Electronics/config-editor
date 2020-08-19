@@ -1,4 +1,108 @@
 
+/*--------------------------
+    Hidden
+----------------------------*/
+.hidden {
+	display: none !important;
+}
+
+/*--------------------------
+    Header
+----------------------------*/
+.fe-header {
+  @media(min-width: (@screen-sm-min - 100)) {
+      position: relative;
+      padding: 40px 40px 20px 45px;
+  }
+
+  @media(max-width: (@screen-xs-max - 100)) {
+      padding: 20px;
+  }
+
+  h2 {
+      font-size: 16px;
+      font-weight: normal;
+      margin: 0;
+
+      & > span {
+          margin-bottom: 7px;
+          display: inline-block;
+
+          &:not(:first-child) {
+              &:before {
+                  content: '/';
+                  margin: 0 4px;
+                  color: @text-color;
+              }
+          }
+          &:last-child {
+              &:after {
+                  content: '/';
+                  margin: 0 4px;
+                  color: @text-color;
+              }
+          }
+      }
+  }
+
+  p {
+      margin-top: 7px;
+  }
+}
+
+
+
+/*--------------------------
+    Close
+----------------------------*/
+.close-variant(@color, @bg-color, @color-hover, @bg-color-hover) {
+	span {
+		background-color: @bg-color;
+		color: @color;
+	}
+
+	&:hover,
+	&:focus {
+		span {
+			background-color: @bg-color-hover;
+			color: @color-hover;
+		}
+	}
+}
+
+
+.close {
+	right: 15px;
+	font-weight: normal;
+	opacity: 1;
+	font-size: 18px;
+	position: absolute;
+	text-align: center;
+	top: 16px;
+	z-index: 1;
+	padding: 0;
+	border: 0;
+	background-color: transparent;
+
+	span {
+		width: 25px;
+		height: 25px;
+		display: block;
+		border-radius: 50%;
+		line-height: 24px;
+		text-shadow: none;
+	}
+	
+	&:not(.close-alt) {
+		.close-variant(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), @white, rgba(255, 255, 255, 0.2));
+	}
+}
+
+.close-alt {
+	.close-variant(#989898, #efefef, #7b7b7b, #e8e8e8);
+}
+
+
 .fe-body {
   @media (min-width: @screen-md-min) {
     padding: 0 0 80px @fe-sidebar-width;
@@ -12,12 +116,10 @@
   overflow: auto;
 }
 
-.fe-body-offline {
-  padding-left: 0px !important;
-}
+
 
 .file-explorer {
-  background-color: @white;
+  background-color: #f5f5f5; // @white;
   position: relative;
   height: 100%;
 
@@ -25,6 +127,11 @@
     height: 100vh;
     overflow: hidden;
   }
+}
+
+.fe-body-offline {
+  background-color: @white;
+  padding-left: 0px !important;
 }
 
 .config-editor {
