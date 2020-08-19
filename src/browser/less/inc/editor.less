@@ -1,4 +1,21 @@
 
+.fe-body {
+  @media (min-width: @screen-md-min) {
+    padding: 0 0 80px @fe-sidebar-width;
+  }
+
+  @media (max-width: @screen-sm-max) {
+    padding: 75px 0 80px;
+  }
+
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.fe-body-offline {
+  padding-left: 0px !important;
+}
+
 .config-editor {
   padding-top: 0px;
   & h1 {

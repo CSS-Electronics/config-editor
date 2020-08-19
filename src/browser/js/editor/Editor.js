@@ -7,7 +7,6 @@ import AlertContainer from "../alert/AlertContainer";
 
 import * as actionsEditor from "./actions";
 import EncryptionModal from "../editorTools/EncryptionModal";
-import DeviceFileModal from "../editorTools/DeviceFileModal";
 import FilterModal from "../editorTools/FilterModal";
 import BitRateModal from "../editorTools/BitRateModal";
 import PartialConfigLoader from "../editorTools/PartialConfigLoader";
@@ -23,11 +22,9 @@ class Editor extends React.Component {
   render() {
     const {
       encryptionSidebarOpen,
-      crcSidebarOpen,
       editorSchemaSidebarOpen,
       filterSidebarOpen,
       bitRateSidebarOpen,
-      deviceFileTableOpen,
       partialConfigLoaderSidebarOpen
     } = this.props;
 
@@ -38,7 +35,6 @@ class Editor extends React.Component {
           "encryption-padding":
             editorSchemaSidebarOpen ||
             encryptionSidebarOpen ||
-            crcSidebarOpen ||
             filterSidebarOpen ||
             bitRateSidebarOpen ||
             partialConfigLoaderSidebarOpen
@@ -50,7 +46,6 @@ class Editor extends React.Component {
         {encryptionSidebarOpen ? <EncryptionModal /> : null}
         {filterSidebarOpen ? <FilterModal /> : null}
         {bitRateSidebarOpen ? <BitRateModal /> : null}
-        {deviceFileTableOpen ? <DeviceFileModal /> : null}
         {partialConfigLoaderSidebarOpen ? <PartialConfigLoader /> : null}
 
       </div>
@@ -62,10 +57,8 @@ const mapStateToProps = state => {
   return {
     encryptionSidebarOpen: state.editorTools.encryptionSidebarOpen,
     editorSchemaSidebarOpen: state.editorTools.editorSchemaSidebarOpen,
-    // crcSidebarOpen: state.editorTools.crcSidebarOpen,
     filterSidebarOpen: state.editorTools.filterSidebarOpen,
     bitRateSidebarOpen: state.editorTools.bitRateSidebarOpen,
-    deviceFileTableOpen: state.editorTools.deviceFileTableOpen,
     partialConfigLoaderSidebarOpen: state.editorTools.partialConfigLoaderSidebarOpen
   };
 };
