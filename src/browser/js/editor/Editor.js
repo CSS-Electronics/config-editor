@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 
 import EditorMainContent from "./EditorMainContent";
-// import AlertContainer from "../alert/AlertContainer";
+import AlertContainer from "../alert/AlertContainer";
 import { pathSlice, isValidDevice } from "../utils";
 import history from "../history";
 // import web from "../web";
@@ -67,7 +67,7 @@ class Editor extends React.Component {
       >
         {!EDITOR.offline}
         <EditorMainContent />
-        {/* <AlertContainer /> */}
+        <AlertContainer />
         {encryptionSidebarOpen ? <EncryptionModal /> : null}
         {/* {crcSidebarOpen ? <CrcModal /> : null} */}
         {filterSidebarOpen ? <FilterModal /> : null}

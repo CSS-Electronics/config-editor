@@ -27,13 +27,14 @@ export const App = () => {
         <Route path={"/"} component={Editor} />
       </Switch>
     );
-  } else {
-    return (
-      <Switch>
-        <Route path={"/configuration/:device?"} component={Editor} />
-      </Switch>
-    );
-  }
+  } 
+  // else {
+  //   return (
+  //     <Switch>
+  //       <Route path={"/configuration/:device?"} component={Editor} />
+  //     </Switch>
+  //   );
+  // }
 };
 
 export default App;

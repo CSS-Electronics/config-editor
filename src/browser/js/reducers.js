@@ -15,11 +15,16 @@
  */
 
 import { combineReducers } from "redux";
+import alert from "./alert/reducer";
+import alertModals from "./alertModals/reducer";
+
 import editor from "./editor/reducer";
 import editorTools from "./editorTools/reducer";
 
 
 const rootReducer = combineReducers({
+  alert,
+  alertModals,
   editor,
   editorTools
 });
