@@ -1,12 +1,10 @@
 import saveAs from "file-saver";
-import history from "../history";
 import * as alertActions from "../alert/actions";
 import * as actionsEditorTools from "../editorTools/actions";
 import {
   isValidUISchema,
   isValidSchema,
   isValidConfig,
-  pathSlice,
   demoMode
 } from "../utils";
 
@@ -288,14 +286,13 @@ export const handleUploadedSchma = file => {
 // handle when the user uploads a configuration file
 export const handleUploadedConfig = file => {
   return function(dispatch, getState) {
-    const { bucket, prefix } = pathSlice(history.location.pathname);
 
     // load the matching schema files if a schema file is not already uploaded
     const localLoaded =
       getState().editor.editorSchemaFiles[0] &&
       getState().editor.editorSchemaFiles[0].name.includes("local");
 
-    if (file && file.name && file.name.length && !localLoaded && !prefix) {
+    if (file && file.name && file.name.length && !localLoaded) {
       dispatch(publicSchemaFiles(file.name));
     }
     if (isValidConfig(file.name)) {

@@ -17,14 +17,11 @@
 import "babel-polyfill";
 import "./less/main.less";
 import "../../font-awesome/css/font-awesome.css";
-import "material-design-iconic-font/dist/css/material-design-iconic-font.min.css";
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import history from "./js/history";
 import configureStore from "./js/store/configure-store";
 import App from "./js/App";
 
@@ -32,9 +29,7 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
       <App />
-    </Router>
   </Provider>,
   document.getElementById("root")
 );

@@ -4,14 +4,9 @@ import { connect } from "react-redux";
 
 import EditorMainContent from "./EditorMainContent";
 import AlertContainer from "../alert/AlertContainer";
-import { pathSlice, isValidDevice } from "../utils";
-import history from "../history";
-// import web from "../web";
 
 import * as actionsEditor from "./actions";
-// import * as actionsBuckets from "../buckets/actions";
 import EncryptionModal from "../editorTools/EncryptionModal";
-// import CrcModal from "../editorTools/CrcModal";
 import DeviceFileModal from "../editorTools/DeviceFileModal";
 import FilterModal from "../editorTools/FilterModal";
 import BitRateModal from "../editorTools/BitRateModal";
@@ -19,24 +14,10 @@ import PartialConfigLoader from "../editorTools/PartialConfigLoader";
 
 class Editor extends React.Component {
   componentWillMount() {
-    // const { selectBucket, resetFiles, publicUiSchemaFiles } = this.props;
-    // const { prefix } = pathSlice(history.location.pathname);
-    // resetFiles();
-    // selectBucket(prefix);
+
     const { publicUiSchemaFiles } = this.props;
 
     publicUiSchemaFiles();
-
-
-    // if (
-    //   prefix &&
-    //   (isValidDevice(prefix)) 
-    //   && !web.LoggedIn()
-    // ) {
-    //   history.push("/login");
-    // } else if (!prefix) {
-    //   publicUiSchemaFiles();
-    // }
   }
 
   render() {
@@ -49,8 +30,6 @@ class Editor extends React.Component {
       deviceFileTableOpen,
       partialConfigLoaderSidebarOpen
     } = this.props;
-
-    const { bucket, prefix } = pathSlice(history.location.pathname);
 
     return (
       <div
@@ -69,7 +48,6 @@ class Editor extends React.Component {
         <EditorMainContent />
         <AlertContainer />
         {encryptionSidebarOpen ? <EncryptionModal /> : null}
-        {/* {crcSidebarOpen ? <CrcModal /> : null} */}
         {filterSidebarOpen ? <FilterModal /> : null}
         {bitRateSidebarOpen ? <BitRateModal /> : null}
         {deviceFileTableOpen ? <DeviceFileModal /> : null}
@@ -95,9 +73,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
-    // selectBucket: (bucket, prefix) =>
-    //   dispatch(actionsBuckets.selectBucket(bucket, prefix)),
-    // resetFiles: () => dispatch(actionsEditor.resetFiles())
   };
 };
 

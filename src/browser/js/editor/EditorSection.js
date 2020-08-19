@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import applyNav from "react-jsonschema-form-pagination";
 import Form from "react-jsonschema-form";
 import _ from "lodash";
-import { pathSlice } from "../utils";
-import history from "../history";
 import EditorSchemaModal from "../editorTools/EditorSchemaModal";
 import EditorToolButton from "../editorTools/EditorToolButton";
 import EditorSubMenu from "../editorTools/EditorSubMenu";
@@ -158,16 +156,6 @@ class LoadEditorFiles extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const prevPrefix = this.props.prefixCrnt;
-    const nextPrefix = nextProps.prefixCrnt;
-
-    if (prevPrefix != nextPrefix) {
-      this.setState({
-        selectedUISchema: "",
-        selectedSchema: "",
-        selectedConfig: ""
-      });
-    }
 
     // ensure that if there's a new schema file list, the selection returns to the default value
     if (this.props.editorSchemaFiles != nextProps.editorSchemaFiles) {
@@ -367,11 +355,9 @@ class LoadEditorFiles extends React.Component {
       uiContent,
       schemaContent,
       editorSchemaSidebarOpen,
-      prefixCrnt
     } = this.props;
 
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
-    const { bucket, prefix } = pathSlice(history.location.pathname);
 
     // Update Select boxes upon a "partial refresh" (pressing Configure while in Configure mode)
     let selectedUISchemaAdj = this.state.selectedUISchema;
@@ -492,7 +478,7 @@ class LoadEditorFiles extends React.Component {
                       <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={!prefix}
+                        disabled={true}
                       >
                         {" "}
                         Submit to S3{" "}
@@ -586,12 +572,10 @@ export class EditorSection extends React.Component {
       setUpdatedFormData,
       setConfigContentPreSubmit,
       editorSchemaSidebarOpen,
-      prefixCrnt
     } = this.props;
 
     return (
       <LoadEditorFiles
-        // device={currentBucket}
         updateConfigFile={updateConfigFile}
         fetchConfigContent={fetchConfigContent}
         fetchSchemaContent={fetchSchemaContent}
@@ -613,7 +597,6 @@ export class EditorSection extends React.Component {
         setUpdatedFormData={setUpdatedFormData}
         setConfigContentPreSubmit={setConfigContentPreSubmit}
         editorSchemaSidebarOpen={editorSchemaSidebarOpen}
-        prefixCrnt={prefixCrnt}
       />
     );
   }
@@ -621,7 +604,6 @@ export class EditorSection extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    // currentBucket: state.buckets.currentBucket,
     editorSchemaFiles: state.editor.editorSchemaFiles,
     editorConfigFiles: state.editor.editorConfigFiles,
     editorUISchemaFiles: state.editor.editorUISchemaFiles,

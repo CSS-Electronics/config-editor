@@ -15,26 +15,10 @@
  */
 
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-
 import Editor from "./editor/Editor";
 
-
 export const App = () => {
-  if (EDITOR.offline) {
-    return (
-      <Switch>
-        <Route path={"/"} component={Editor} />
-      </Switch>
-    );
-  } 
-  // else {
-  //   return (
-  //     <Switch>
-  //       <Route path={"/configuration/:device?"} component={Editor} />
-  //     </Switch>
-  //   );
-  // }
+  return(<Editor/>)
 };
 
 export default App;
