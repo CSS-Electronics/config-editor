@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import InputFieldSimple from "./InputFieldSimple";
-import OutputField from "./OutputField";
 
 import * as actionsEditorTools from "./actions";
 import * as actionsAlert from "../alert/actions";

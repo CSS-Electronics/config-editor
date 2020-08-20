@@ -1,6 +1,7 @@
 import React from "react";
-import classNames from "classnames";
 import { connect } from "react-redux";
+
+import classNames from "classnames";
 
 import EditorMainContent from "./EditorMainContent";
 import AlertContainer from "../alert/AlertContainer";

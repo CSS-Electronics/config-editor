@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import applyNav from "react-jsonschema-form-pagination";
 import Form from "react-jsonschema-form";
-import _ from "lodash";
+// import _ from "lodash";
 import EditorSchemaModal from "../editorTools/EditorSchemaModal";
 import EditorToolButton from "../editorTools/EditorToolButton";
 import EditorSubMenu from "../editorTools/EditorSubMenu";

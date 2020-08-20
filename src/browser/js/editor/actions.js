@@ -27,10 +27,6 @@ export const SET_CONFIG_DATA_PRE_CHANGE = "editor/SET_CONFIG_DATA_PRE_CHANGE";
 export const SET_UPDATED_FORM_DATA = "editor/SET_UPDATED_FORM_DATA";
 export const SET_ACTIVE_NAV = "editor/SET_ACTIVE_NAV";
 export const SET_UISCHEMA_SOURCE = "editor/SET_UISCHEMA_SOURCE";
-export const SET_DEVICE_FILE_DATA = "editor/SET_DEVICE_FILE_DATA";
-export const SET_PREV_DEVICE_FILE_DEVICE = "editor/SET_PREV_DEVICE_FILE_DEVICE";
-export const SET_DEVICE_FILE_LAST_MODIFIED =
-  "editor/SET_DEVICE_FILE_LAST_MODIFIED";
 export const SET_CONFIG_DATA_LOCAL = "SET_CONFIG_DATA_LOCAL";
 
 // Note: These need to be updated with future firmware revisions
@@ -52,17 +48,10 @@ const schemaAry = [
   "schema-00.05.json | CANedge1"
 ];
 
-const regexSchema = new RegExp(/^schema-\d{2}\.\d{2}\.json/, "g");
-const regexSchemaPublic = new RegExp(
-  /^schema-\d{2}\.\d{2}\.json \| CANedge(1|2)$/,
-  "g"
-);
 const regexUISchemaPublic = new RegExp(
   /^uischema-\d{2}\.\d{2}\.json \| (Advanced|Simple)$/,
   "g"
 );
-const regexConfig = new RegExp(/^config-\d{2}\.\d{2}\.json/, "g");
-const regexDeviceFile = new RegExp(/^device\.json/, "g");
 
 // load the Simple/Advanced default UIschema in the online & offline editor
 export const publicUiSchemaFiles = () => {

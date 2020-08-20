@@ -16,7 +16,6 @@ export const TOGGLE_BITRATE_SIDEBAR = "editorTools/TOGGLE_BITRATE_SIDEBAR";
 export const TOGGLE_PARTIAL_CONFIG_LOADER_SIDEBAR = "editorTools/TOGGLE_PARTIAL_CONFIG_LOADER_SIDEBAR";
 export const SET_CRC32_EDITOR_LIVE = "editorTools/SET_CRC32_EDITOR_LIVE";
 export const SET_CRC32_EDITOR_PRE = "editorTools/SET_CRC32_EDITOR_PRE";
-export const OPEN_DEVICE_FILE_TABLE = "editorTools/OPEN_DEVICE_FILE_TABLE";
 export const CLOSE_EDITOR_SIDEBARS = " editorTools/CLOSE_EDITOR_SIDEBARS";
 
 const { detect } = require("detect-browser");
@@ -64,9 +63,6 @@ export const toggleCrcSideBar = () => ({
   type: TOGGLE_CRC_SIDEBAR
 });
 
-export const openDeviceFileTable = () => ({
-  type: OPEN_DEVICE_FILE_TABLE
-});
 
 export const calcCrc32EditorLive = () => {
   return function(dispatch, getState) {
