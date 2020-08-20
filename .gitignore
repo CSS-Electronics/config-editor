@@ -4,3 +4,4 @@ site
 .eslintrc.json
 simple/*
 *.bat
+analyse.js

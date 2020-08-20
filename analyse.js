@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'production';
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
-const webpackConfigProd = require('C:/Users/marti/Documents/config-editor-temp/webpack.simple.js');
+const webpackConfigProd = require('C:/Users/marti/Documents/config-editor-temp-v3/webpack.simple.js');
 
 webpackConfigProd.plugins.push(new BundleAnalyzerPlugin());
 
