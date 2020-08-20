@@ -1,1 +1,1 @@
-# Config Editor - Load & Modify your JSON Configuration File
+# Config Editor - Load & Modify JSON Configuration Files
