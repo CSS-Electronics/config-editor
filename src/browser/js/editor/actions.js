@@ -1,12 +1,6 @@
 import saveAs from "file-saver";
 import * as alertActions from "../alert/actions";
 import * as actionsEditorTools from "../editorTools/actions";
-import {
-  isValidUISchema,
-  isValidSchema,
-  isValidConfig,
-  demoMode
-} from "../utils";
 
 export const SET_SCHEMA_LIST = "editor/SET_SCHEMA_LIST";
 export const SET_CONFIG_LIST = "editor/SET_CONFIG_LIST";
@@ -28,6 +22,35 @@ export const SET_UPDATED_FORM_DATA = "editor/SET_UPDATED_FORM_DATA";
 export const SET_ACTIVE_NAV = "editor/SET_ACTIVE_NAV";
 export const SET_UISCHEMA_SOURCE = "editor/SET_UISCHEMA_SOURCE";
 export const SET_CONFIG_DATA_LOCAL = "SET_CONFIG_DATA_LOCAL";
+
+// Toggle demo mode on/off
+const demoMode = false 
+
+// Utils for testing schema name validity
+const isValidUISchema = file => {
+  const regexUiSchema = new RegExp(
+    "(^server_|^)uischema-\\d{2}\\.\\d{2}\\.json",
+    "g"
+  );
+  return regexUiSchema.test(file);
+};
+
+
+const isValidSchema = file => {
+  const regexSchema = new RegExp(
+    "(^([0-9A-Fa-f]){8}_|server_|^)schema-\\d{2}\\.\\d{2}\\.json",
+    "g"
+  );
+  return regexSchema.test(file);
+};
+
+const isValidConfig = file => {
+  const regexConfig = new RegExp(
+    "(^([0-9A-Fa-f]){8}_|server_|^)config-\\d{2}\\.\\d{2}\\.json",
+    "g"
+  );
+  return regexConfig.test(file);
+};
 
 // Note: These need to be updated with future firmware revisions
 const uiSchemaAry = [
