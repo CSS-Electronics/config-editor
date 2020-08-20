@@ -75,15 +75,6 @@ export class EditorSubMenuInput extends React.Component {
           comment="Encryption tool"
           className="fa fa-lock"
         />{" "}
-        {EDITOR.offline ? null : (
-          <div>
-            <EditorToolButton
-              onClick={this.toolsToggleCrcSideBar}
-              comment="Config checksum"
-              className="fa fa-hashtag"
-            />{" "}
-          </div>
-        )}
         <EditorToolButton
           onClick={this.toolsToggleFilterSideBar}
           comment="Filter checker"

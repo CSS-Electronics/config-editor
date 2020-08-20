@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import classNames from "classnames";
 
-import EditorMainContent from "./EditorMainContent";
+import EditorSection from "./EditorSection";
 import AlertContainer from "../alert/AlertContainer";
 
 import * as actionsEditor from "./actions";
@@ -14,7 +14,6 @@ import PartialConfigLoader from "../editorTools/PartialConfigLoader";
 
 class Editor extends React.Component {
   componentWillMount() {
-
     const { publicUiSchemaFiles } = this.props;
 
     publicUiSchemaFiles();
@@ -26,7 +25,7 @@ class Editor extends React.Component {
       editorSchemaSidebarOpen,
       filterSidebarOpen,
       bitRateSidebarOpen,
-      partialConfigLoaderSidebarOpen
+      partialConfigLoaderSidebarOpen,
     } = this.props;
 
     return (
@@ -38,39 +37,39 @@ class Editor extends React.Component {
             encryptionSidebarOpen ||
             filterSidebarOpen ||
             bitRateSidebarOpen ||
-            partialConfigLoaderSidebarOpen
+            partialConfigLoaderSidebarOpen,
         })}
       >
-        {!EDITOR.offline}
-        <EditorMainContent />
+        <div className={"fe-body fe-body-offline"}>
+          <header className="fe-header top-header" />
+          <EditorSection />
+        </div>
+
         <AlertContainer />
         {encryptionSidebarOpen ? <EncryptionModal /> : null}
         {filterSidebarOpen ? <FilterModal /> : null}
         {bitRateSidebarOpen ? <BitRateModal /> : null}
         {partialConfigLoaderSidebarOpen ? <PartialConfigLoader /> : null}
-
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     encryptionSidebarOpen: state.editorTools.encryptionSidebarOpen,
     editorSchemaSidebarOpen: state.editorTools.editorSchemaSidebarOpen,
     filterSidebarOpen: state.editorTools.filterSidebarOpen,
     bitRateSidebarOpen: state.editorTools.bitRateSidebarOpen,
-    partialConfigLoaderSidebarOpen: state.editorTools.partialConfigLoaderSidebarOpen
+    partialConfigLoaderSidebarOpen:
+      state.editorTools.partialConfigLoaderSidebarOpen,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);
