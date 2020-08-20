@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import _ from "lodash";
 import EditorToolButton from "./EditorToolButton";
 import * as actionsEditor from "../editor/actions";
 import * as actionsEditorTools from "./actions";

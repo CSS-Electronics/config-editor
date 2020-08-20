@@ -42,10 +42,6 @@ const schemaAry = [
   "schema-01.02.json | CANedge1",
   "schema-00.07.json | CANedge2",
   "schema-00.07.json | CANedge1",
-  "schema-00.06.json | CANedge2",
-  "schema-00.06.json | CANedge1",
-  "schema-00.05.json | CANedge2",
-  "schema-00.05.json | CANedge1"
 ];
 
 const regexUISchemaPublic = new RegExp(
