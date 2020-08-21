@@ -311,16 +311,7 @@ class LoadEditorFiles extends React.Component {
               isCompareChanges: false
             });
           }
-          //  else {
-          //   this.props.updateConfigFile(
-          //     JSON.stringify(formData, null, 2),
-          //     `${this.props.device}/${revisedConfigFile}`
-          //   );
-          //   document.body.style.overflow = "auto";
-          //   this.setState({
-          //     isCompareChanges: false
-          //   });
-          // }
+   
         }
       }
     );
@@ -354,6 +345,8 @@ class LoadEditorFiles extends React.Component {
       uiContent,
       schemaContent,
       editorSchemaSidebarOpen,
+      modalList,
+      modalsOpen
     } = this.props;
 
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
@@ -406,15 +399,24 @@ class LoadEditorFiles extends React.Component {
       ? editorConfigFiles[0].name.replace(".json", "")
       : "None";
 
+      console.log("Editor sidebar new test: ", editorSchemaSidebarOpen)
+
     return (
       <div className="fe-header config-editor">
-        <div
+       
+        {/* modalList, */}
+      {/* modalsOpen */}
+       
+        {/* <div
           className={classNames({
             "editor-schema-modal-hide": editorSchemaSidebarOpen
               ? !editorSchemaSidebarOpen
               : true
           })}
-        >
+        > */}
+      
+
+          {editorSchemaSidebarOpen ? 
           <EditorSchemaModal
             selectedUISchema={selectedUISchemaAdj}
             selectedSchema={selectedSchemaAdj}
@@ -426,7 +428,10 @@ class LoadEditorFiles extends React.Component {
             handleSchemaChange={this.handleSchemaChange}
             handleConfigChange={this.handleConfigChange}
           />
-        </div>
+          : null}
+
+
+
         <div>
           <br />
           <br />
@@ -543,6 +548,8 @@ class LoadEditorFiles extends React.Component {
         </div>
       </div>
     );
+
+
   }
 }
 
@@ -571,6 +578,8 @@ export class EditorSection extends React.Component {
       setUpdatedFormData,
       setConfigContentPreSubmit,
       editorSchemaSidebarOpen,
+      modalList,
+      modalsOpen
     } = this.props;
 
     return (
@@ -596,6 +605,8 @@ export class EditorSection extends React.Component {
         setUpdatedFormData={setUpdatedFormData}
         setConfigContentPreSubmit={setConfigContentPreSubmit}
         editorSchemaSidebarOpen={editorSchemaSidebarOpen}
+        modalList={modalList}
+        modalsOpen={modalsOpen}
       />
     );
   }

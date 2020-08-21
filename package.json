@@ -4,7 +4,7 @@
   "description": "A React based JSON Schema editor",
   "main": "simple.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --progress --colors --hot",
+    "start": "webpack-dev-server --config webpack.simple.js --mode production --open --progress --colors --hot",
     "build": "webpack --mode production",
     "simple": "webpack --config webpack.simple.js --mode production",
     "test": "jest"

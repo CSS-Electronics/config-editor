@@ -9,7 +9,7 @@ export default (
     crc32EditorLive: "",
     crc32EditorPre: "",
     deviceFileTableOpen: false,
-    editorSchemaSidebarOpen: false,
+    editorSchemaSidebarOpen: true,
     crcSidebarOpen: false,
     devicePublicKey: "",
     serverPublicKeyBase64: "",
