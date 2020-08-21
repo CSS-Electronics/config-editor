@@ -12,6 +12,8 @@ import * as actionsEditorTools from "../editorTools/actions";
 import * as alertActions from "../alert/actions";
 import EditorChangesComparison from "./EditorChangesComparison";
 import classNames from "classnames";
+import AlertContainer from "../alert/AlertContainer";
+
 
 const { detect } = require("detect-browser");
 const browser = detect();
@@ -63,7 +65,7 @@ class LoadEditorFiles extends React.Component {
       isSubmitting: false,
       isLiveValidation: true,
       isDownloadConfig: false,
-      isCompareChanges: false
+      isCompareChanges: false,
     };
 
     this.input = "";
@@ -79,7 +81,7 @@ class LoadEditorFiles extends React.Component {
     this.setState(
       {
         uischema: selection,
-        selectedUISchema: selection
+        selectedUISchema: selection,
       },
       () => {
         this.props.fetchUISchemaContent(this.state.uischema);
@@ -91,7 +93,7 @@ class LoadEditorFiles extends React.Component {
     this.setState(
       {
         schema: selection,
-        selectedSchema: selection
+        selectedSchema: selection,
       },
       () => {
         this.props.fetchSchemaContent(this.state.schema);
@@ -103,7 +105,7 @@ class LoadEditorFiles extends React.Component {
     this.setState(
       {
         config: selection,
-        selectedConfig: selection
+        selectedConfig: selection,
       },
       () => {
         this.props.fetchConfigContent(this.state.config, "editor");
@@ -114,7 +116,7 @@ class LoadEditorFiles extends React.Component {
   handleReviewConfigChange(selection) {
     this.setState(
       {
-        configReview: selection
+        configReview: selection,
       },
       () => {
         this.props.fetchConfigContent(selection.value, "review");
@@ -124,26 +126,30 @@ class LoadEditorFiles extends React.Component {
 
   handleCompareChanges(e) {
     this.setState({
-      isCompareChanges: !this.state.isCompareChanges
+      isCompareChanges: !this.state.isCompareChanges,
     });
   }
 
   closeChangesModal(e) {
     this.setState({
-      isCompareChanges: false
+      isCompareChanges: false,
     });
     document.body.style.overflow = "auto";
   }
 
   handleValidationCheck(e) {
     this.setState({
-      isLiveValidation: !this.state.isLiveValidation
+      isLiveValidation: !this.state.isLiveValidation,
     });
     this.props.setConfigContentPreSubmit();
   }
 
   enableDownload() {
     isDownloadConfig = true;
+  }
+
+  componentWillMount() {
+    this.props.publicUiSchemaFiles();
   }
 
   componentDidMount() {
@@ -155,12 +161,11 @@ class LoadEditorFiles extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     // ensure that if there's a new schema file list, the selection returns to the default value
     if (this.props.editorSchemaFiles != nextProps.editorSchemaFiles) {
       this.setState({
         schema: "",
-        selectedSchema: ""
+        selectedSchema: "",
       });
     }
 
@@ -179,29 +184,29 @@ class LoadEditorFiles extends React.Component {
       this.props.setCrc32EditorPre(cfgCrc32EditorPre);
     }
 
-    let uiLocal = nextProps.editorUISchemaFiles.filter(file =>
+    let uiLocal = nextProps.editorUISchemaFiles.filter((file) =>
       file.name.includes("(local)")
     );
-    let schemaLocal = nextProps.editorSchemaFiles.filter(file =>
+    let schemaLocal = nextProps.editorSchemaFiles.filter((file) =>
       file.name.includes("(local)")
     );
-    let configLocal = nextProps.editorConfigFiles.filter(file =>
+    let configLocal = nextProps.editorConfigFiles.filter((file) =>
       file.name.includes("(local)")
     );
 
     if (uiLocal.length) {
       this.setState({
-        selectedUISchema: uiLocal[0].name
+        selectedUISchema: uiLocal[0].name,
       });
     }
     if (schemaLocal.length) {
       this.setState({
-        selectedSchema: schemaLocal[0].name
+        selectedSchema: schemaLocal[0].name,
       });
     }
     if (configLocal.length) {
       this.setState({
-        selectedConfig: configLocal[0].name
+        selectedConfig: configLocal[0].name,
       });
     }
 
@@ -209,7 +214,7 @@ class LoadEditorFiles extends React.Component {
     if (nextProps.editorConfigFiles.length == 0) {
       this.setState(
         {
-          configReview: { value: "None", label: "None" }
+          configReview: { value: "None", label: "None" },
         },
         () => {
           // this.props.fetchConfigContent(configName, "review");
@@ -228,7 +233,7 @@ class LoadEditorFiles extends React.Component {
 
       this.setState(
         {
-          configReview: { value: configName, label: configName }
+          configReview: { value: configName, label: configName },
         },
         () => {
           this.props.fetchConfigContent(configName, "review");
@@ -245,7 +250,7 @@ class LoadEditorFiles extends React.Component {
       this.props.showAlert({
         type: "info",
         message: "No Rule Schema has been loaded",
-        autoClear: true
+        autoClear: true,
       });
       return;
     }
@@ -254,7 +259,7 @@ class LoadEditorFiles extends React.Component {
       ? this.props.editorSchemaFiles[0].name
       : null;
 
-    const checkSchemaUpload = this.props.editorSchemaFiles.filter(file =>
+    const checkSchemaUpload = this.props.editorSchemaFiles.filter((file) =>
       file.name.includes("(local)")
     );
     let checkUpload = null;
@@ -281,7 +286,7 @@ class LoadEditorFiles extends React.Component {
           ? this.props.editorConfigFiles[0].name
           : null,
         formData,
-        isSubmitting: true
+        isSubmitting: true,
       },
       () => {
         let tempJson = JSON.stringify(formData, null, 2);
@@ -298,8 +303,8 @@ class LoadEditorFiles extends React.Component {
             isCompareChanges: true,
             revisedConfigFile: {
               value: revisedConfigFile,
-              label: revisedConfigFile
-            }
+              label: revisedConfigFile,
+            },
           });
           document.body.style.overflow = "hidden";
         } else {
@@ -308,10 +313,9 @@ class LoadEditorFiles extends React.Component {
             isDownloadConfig = false;
             document.body.style.overflow = "auto";
             this.setState({
-              isCompareChanges: false
+              isCompareChanges: false,
             });
           }
-   
         }
       }
     );
@@ -324,7 +328,7 @@ class LoadEditorFiles extends React.Component {
       type: "danger",
       message:
         "The config contains validation errors (see top of editor) - please review and try again",
-      autoClear: true
+      autoClear: true,
     });
   }
 
@@ -332,7 +336,7 @@ class LoadEditorFiles extends React.Component {
     this.props.setUpdatedFormData(formData);
   };
 
-  onNavChange = nav => {
+  onNavChange = (nav) => {
     activatedTab = nav[0];
   };
 
@@ -346,7 +350,7 @@ class LoadEditorFiles extends React.Component {
       schemaContent,
       editorSchemaSidebarOpen,
       modalList,
-      modalsOpen
+      modalsOpen,
     } = this.props;
 
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
@@ -356,13 +360,13 @@ class LoadEditorFiles extends React.Component {
     let selectedSchemaAdj = this.state.selectedSchema;
     let selectedConfigAdj = this.state.selectedConfig;
 
-    const testUISchemaLoaded = editorUISchemaFiles.filter(file =>
+    const testUISchemaLoaded = editorUISchemaFiles.filter((file) =>
       file.name.includes("(local)")
     ).length;
-    const testSchemaLoaded = editorSchemaFiles.filter(file =>
+    const testSchemaLoaded = editorSchemaFiles.filter((file) =>
       file.name.includes("(local)")
     ).length;
-    const testConfigLoaded = editorConfigFiles.filter(file =>
+    const testConfigLoaded = editorConfigFiles.filter((file) =>
       file.name.includes("(local)")
     ).length;
 
@@ -399,24 +403,28 @@ class LoadEditorFiles extends React.Component {
       ? editorConfigFiles[0].name.replace(".json", "")
       : "None";
 
-      console.log("Editor sidebar new test: ", editorSchemaSidebarOpen)
+    let sideBarOpen = editorSchemaSidebarOpen || modalsOpen.includes(true);
+    console.log(sideBarOpen);
 
     return (
-      <div className="fe-header config-editor">
-       
-        {/* modalList, */}
-      {/* modalsOpen */}
-       
-        {/* <div
+      <div
+        className={classNames({
+          "fe-header config-editor": true,
+          "encryption-padding": sideBarOpen,
+        })}
+      >
+
+        <AlertContainer />
+
+        {modalList.map((modal, idx) => (modalsOpen[idx] ? modal : null))}
+
+        <div
           className={classNames({
             "editor-schema-modal-hide": editorSchemaSidebarOpen
               ? !editorSchemaSidebarOpen
-              : true
+              : true,
           })}
-        > */}
-      
-
-          {editorSchemaSidebarOpen ? 
+        >
           <EditorSchemaModal
             selectedUISchema={selectedUISchemaAdj}
             selectedSchema={selectedSchemaAdj}
@@ -428,9 +436,7 @@ class LoadEditorFiles extends React.Component {
             handleSchemaChange={this.handleSchemaChange}
             handleConfigChange={this.handleConfigChange}
           />
-          : null}
-
-
+        </div>
 
         <div>
           <br />
@@ -548,8 +554,6 @@ class LoadEditorFiles extends React.Component {
         </div>
       </div>
     );
-
-
   }
 }
 
@@ -579,7 +583,8 @@ export class EditorSection extends React.Component {
       setConfigContentPreSubmit,
       editorSchemaSidebarOpen,
       modalList,
-      modalsOpen
+      modalsOpen,
+      publicUiSchemaFiles
     } = this.props;
 
     return (
@@ -607,12 +612,13 @@ export class EditorSection extends React.Component {
         editorSchemaSidebarOpen={editorSchemaSidebarOpen}
         modalList={modalList}
         modalsOpen={modalsOpen}
+        publicUiSchemaFiles={publicUiSchemaFiles}
       />
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     editorSchemaFiles: state.editor.editorSchemaFiles,
     editorConfigFiles: state.editor.editorConfigFiles,
@@ -623,33 +629,34 @@ const mapStateToProps = state => {
     configUpdate: state.editor.configUpdate,
     configContentPreChange: state.editor.configContentPreChange,
     deviceFileContent: state.editor.deviceFileContent,
-    editorSchemaSidebarOpen: state.editorTools.editorSchemaSidebarOpen
+    editorSchemaSidebarOpen: state.editorTools.editorSchemaSidebarOpen,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateConfigFile: (content, object) =>
       dispatch(actionsEditor.updateConfigFile(content, object)),
     fetchConfigContent: (filename, type) =>
       dispatch(actionsEditor.fetchConfigContent(filename, type)),
-    fetchSchemaContent: schema =>
+    fetchSchemaContent: (schema) =>
       dispatch(actionsEditor.fetchSchemaContent(schema)),
-    setConfigContent: content =>
+    setConfigContent: (content) =>
       dispatch(actionsEditor.setConfigContent(content)),
-    fetchUISchemaContent: uiSchema =>
+    fetchUISchemaContent: (uiSchema) =>
       dispatch(actionsEditor.fetchUISchemaContent(uiSchema)),
     saveUpdatedConfiguration: (filename, content) =>
       dispatch(actionsEditor.saveUpdatedConfiguration(filename, content)),
-    showAlert: alert => dispatch(alertActions.set(alert)),
-    setCrc32EditorLive: cfgCrc32EditorLive =>
+    showAlert: (alert) => dispatch(alertActions.set(alert)),
+    setCrc32EditorLive: (cfgCrc32EditorLive) =>
       dispatch(actionsEditorTools.setCrc32EditorLive(cfgCrc32EditorLive)),
-    setCrc32EditorPre: cfgCrc32EditorPre =>
+    setCrc32EditorPre: (cfgCrc32EditorPre) =>
       dispatch(actionsEditorTools.setCrc32EditorPre(cfgCrc32EditorPre)),
-    setUpdatedFormData: formData =>
+    setUpdatedFormData: (formData) =>
       dispatch(actionsEditor.setUpdatedFormData(formData)),
     setConfigContentPreSubmit: () =>
-      dispatch(actionsEditor.setConfigContentPreSubmit())
+      dispatch(actionsEditor.setConfigContentPreSubmit()),
+   publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
   };
 };
 

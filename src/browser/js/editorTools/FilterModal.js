@@ -240,7 +240,7 @@ class FilterModal extends React.Component {
 
         <h4>CAN ID filter entry checker</h4>
         <div className="row no-gutters">
-          <div className="form-group pl0 field-string col-md-6">
+          <div className="form-group field-string col-md-6">
             ID format
             <Select
               value={selOption}
@@ -253,7 +253,7 @@ class FilterModal extends React.Component {
             </p>
           </div>
 
-          <div className="form-group pl0 field-string col-md-6">
+          <div className="form-group field-string col-md-6">
             Matching
             <Select
               value={
