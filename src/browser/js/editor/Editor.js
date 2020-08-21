@@ -23,7 +23,7 @@ class Editor extends React.Component {
       <BitRateModal />,
       <PartialConfigLoader />,
     ];
-    
+
     const modalsOpen = [
       encryptionSidebarOpen,
       filterSidebarOpen,
@@ -31,11 +31,18 @@ class Editor extends React.Component {
       partialConfigLoaderSidebarOpen,
     ];
 
+    let modalsInfo = [
+      {name: "encryption-modal", comment: "Encryption tool", class:"fa fa-lock", modal: <EncryptionModal />},
+      {name: "filter-modal", comment: "Filter checker", class:"fa fa-filter", modal: <FilterModal />},
+      {name: "bitrate-modal", comment: "Bit-time calculator", class:"fa fa-calculator", modal:<BitRateModal />},
+      {name: "partialconfig-modal", comment: "Partial config loader", class:"fa fa-plus", modal:<PartialConfigLoader />}
+    ]
+
     return (
       <div className="file-explorer">
         <div className={"fe-body fe-body-offline"}>
           <header className="fe-header top-header" />
-          <EditorSection modalList={modalList} modalsOpen={modalsOpen} />
+          <EditorSection modalList={modalList} modalsOpen={modalsOpen} modalsInfo={modalsInfo}/>
         </div>
       </div>
     );

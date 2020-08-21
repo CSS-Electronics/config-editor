@@ -14,30 +14,22 @@ import EditorChangesComparison from "./EditorChangesComparison";
 import classNames from "classnames";
 import AlertContainer from "../alert/AlertContainer";
 
-
 const { detect } = require("detect-browser");
 const browser = detect();
 
-let crcBrowserSupport = 0;
-
-if (
-  browser.name != "chrome" &&
-  browser.name != "firefox" &&
-  browser.name != "opera" &&
-  browser.name != "safari" &&
-  browser.name != "edge"
-) {
-  crcBrowserSupport = 0;
-} else {
-  crcBrowserSupport = 1;
-}
+let crcBrowserSupport = [
+  "chrome",
+  "firefox",
+  "opera",
+  "safari",
+  "edge",
+].includes(browser.name);
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
-let isValidationError = false;
 let isDownloadConfig = false;
 let activatedTab;
 
-class LoadEditorFiles extends React.Component {
+export class EditorSection extends React.Component {
   constructor(props) {
     super(props);
     this.editorForm = React.createRef();
@@ -50,6 +42,7 @@ class LoadEditorFiles extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.escFunction = this.escFunction.bind(this);
+    this.subMenuBtnClick = this.subMenuBtnClick.bind(this);
 
     this.state = {
       uischema: "",
@@ -66,6 +59,7 @@ class LoadEditorFiles extends React.Component {
       isLiveValidation: true,
       isDownloadConfig: false,
       isCompareChanges: false,
+      activeSideBar: "schema-modal",
     };
 
     this.input = "";
@@ -87,6 +81,15 @@ class LoadEditorFiles extends React.Component {
         this.props.fetchUISchemaContent(this.state.uischema);
       }
     );
+  }
+
+  subMenuBtnClick(name) {
+    console.log("name:", name);
+    let sideBar = this.state.activeSideBar == name ? "none" : name;
+
+    this.setState({
+      activeSideBar: sideBar,
+    });
   }
 
   handleSchemaChange(selection) {
@@ -323,7 +326,6 @@ class LoadEditorFiles extends React.Component {
 
   handleError(errors) {
     isDownloadConfig = false;
-    isValidationError = true;
     this.props.showAlert({
       type: "danger",
       message:
@@ -351,7 +353,10 @@ class LoadEditorFiles extends React.Component {
       editorSchemaSidebarOpen,
       modalList,
       modalsOpen,
+      modalsInfo,
     } = this.props;
+
+    console.log(this.state.activeSideBar);
 
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
 
@@ -404,7 +409,27 @@ class LoadEditorFiles extends React.Component {
       : "None";
 
     let sideBarOpen = editorSchemaSidebarOpen || modalsOpen.includes(true);
-    console.log(sideBarOpen);
+
+    let modalsInfoFull = modalsInfo
+    .concat({
+      name: "schema-modal",
+      comment: "Schema & config loader",
+      class: "editor-schema-button",
+      modal: 
+        <EditorSchemaModal
+          selectedUISchema={selectedUISchemaAdj}
+          selectedSchema={selectedSchemaAdj}
+          selectedConfig={selectedConfigAdj}
+          editorUISchemaFiles={editorUISchemaFiles}
+          editorSchemaFiles={editorSchemaFiles}
+          editorConfigFiles={editorConfigFiles}
+          handleUiSchemaChange={this.handleUiSchemaChange}
+          handleSchemaChange={this.handleSchemaChange}
+          handleConfigChange={this.handleConfigChange}
+        />
+    });
+
+    console.log(modalsInfoFull);
 
     return (
       <div
@@ -413,12 +438,21 @@ class LoadEditorFiles extends React.Component {
           "encryption-padding": sideBarOpen,
         })}
       >
-
         <AlertContainer />
 
-        {modalList.map((modal, idx) => (modalsOpen[idx] ? modal : null))}
+        {modalsInfoFull.map((modal, idx) => (
+          <div
+            style={{
+              display: modal.name == this.state.activeSideBar ? "" : "none",
+            }}
+          >
+            {modal.modal}
+          </div>
+        ))}
 
-        <div
+        {/* // modalsOpen[idx] ? modal : null))} */}
+
+        {/* <div
           className={classNames({
             "editor-schema-modal-hide": editorSchemaSidebarOpen
               ? !editorSchemaSidebarOpen
@@ -436,6 +470,25 @@ class LoadEditorFiles extends React.Component {
             handleSchemaChange={this.handleSchemaChange}
             handleConfigChange={this.handleConfigChange}
           />
+        </div> */}
+
+        {/* 
+        
+        1) Find out why onClick is called on render and fix it 
+        2) or, remove the "none" part from the function 
+        3) Clean up code to use modalsInfoFull
+        4) Change the editorTool for the schema loader to be standard type
+
+        */}
+
+        <div className="col-xs-7" style={{ float: "left", zIndex: "99999" }}>
+          {modalsInfoFull.map((modal, idx) => (
+            <EditorToolButton
+              onClick={() => this.subMenuBtnClick(modal.name)}
+              comment={modal.comment}
+              className={modal.class}
+            />
+          ))}
         </div>
 
         <div>
@@ -557,67 +610,6 @@ class LoadEditorFiles extends React.Component {
   }
 }
 
-export class EditorSection extends React.Component {
-  render() {
-    const {
-      editorSchemaFiles,
-      editorConfigFiles,
-      editorUISchemaFiles,
-      // currentBucket,
-      updateConfigFile,
-      fetchConfigContent,
-      fetchSchemaContent,
-      fetchUISchemaContent,
-      configContent,
-      uiContent,
-      schemaContent,
-      configUpdate,
-      setConfigContent,
-      saveUpdatedConfiguration,
-      configContentPreChange,
-      showAlert,
-      setCrc32EditorLive,
-      setCrc32EditorPre,
-      deviceFileContent,
-      setUpdatedFormData,
-      setConfigContentPreSubmit,
-      editorSchemaSidebarOpen,
-      modalList,
-      modalsOpen,
-      publicUiSchemaFiles
-    } = this.props;
-
-    return (
-      <LoadEditorFiles
-        updateConfigFile={updateConfigFile}
-        fetchConfigContent={fetchConfigContent}
-        fetchSchemaContent={fetchSchemaContent}
-        fetchUISchemaContent={fetchUISchemaContent}
-        configContent={configContent}
-        uiContent={uiContent}
-        schemaContent={schemaContent}
-        configUpdate={configUpdate}
-        setConfigContent={setConfigContent}
-        saveUpdatedConfiguration={saveUpdatedConfiguration}
-        editorSchemaFiles={editorSchemaFiles}
-        editorConfigFiles={editorConfigFiles}
-        editorUISchemaFiles={editorUISchemaFiles}
-        configContentPreChange={configContentPreChange}
-        showAlert={showAlert}
-        setCrc32EditorLive={setCrc32EditorLive}
-        setCrc32EditorPre={setCrc32EditorPre}
-        deviceFileContent={deviceFileContent}
-        setUpdatedFormData={setUpdatedFormData}
-        setConfigContentPreSubmit={setConfigContentPreSubmit}
-        editorSchemaSidebarOpen={editorSchemaSidebarOpen}
-        modalList={modalList}
-        modalsOpen={modalsOpen}
-        publicUiSchemaFiles={publicUiSchemaFiles}
-      />
-    );
-  }
-}
-
 const mapStateToProps = (state) => {
   return {
     editorSchemaFiles: state.editor.editorSchemaFiles,
@@ -656,7 +648,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionsEditor.setUpdatedFormData(formData)),
     setConfigContentPreSubmit: () =>
       dispatch(actionsEditor.setConfigContentPreSubmit()),
-   publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
+    publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
   };
 };
 
