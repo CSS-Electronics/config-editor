@@ -351,7 +351,6 @@ export class EditorSection extends React.Component {
       uiContent,
       schemaContent,
       editorSchemaSidebarOpen,
-      modalList,
       modalsOpen,
       modalsInfo,
     } = this.props;
@@ -410,12 +409,11 @@ export class EditorSection extends React.Component {
 
     let sideBarOpen = editorSchemaSidebarOpen || modalsOpen.includes(true);
 
-    let modalsInfoFull = modalsInfo
-    .concat({
+    let modalsInfoFull = modalsInfo.concat({
       name: "schema-modal",
       comment: "Schema & config loader",
-      class: "editor-schema-button",
-      modal: 
+      class: "fa fa-cogs",
+      modal: (
         <EditorSchemaModal
           selectedUISchema={selectedUISchemaAdj}
           selectedSchema={selectedSchemaAdj}
@@ -427,20 +425,19 @@ export class EditorSection extends React.Component {
           handleSchemaChange={this.handleSchemaChange}
           handleConfigChange={this.handleConfigChange}
         />
+      ),
     });
-
-    console.log(modalsInfoFull);
 
     return (
       <div
         className={classNames({
           "fe-header config-editor": true,
-          "encryption-padding": sideBarOpen,
+          "encryption-padding": this.state.activeSideBar != "none",
         })}
       >
         <AlertContainer />
 
-        {modalsInfoFull.map((modal, idx) => (
+        {modalsInfoFull.map((modal) => (
           <div
             style={{
               display: modal.name == this.state.activeSideBar ? "" : "none",
@@ -450,32 +447,8 @@ export class EditorSection extends React.Component {
           </div>
         ))}
 
-        {/* // modalsOpen[idx] ? modal : null))} */}
-
-        {/* <div
-          className={classNames({
-            "editor-schema-modal-hide": editorSchemaSidebarOpen
-              ? !editorSchemaSidebarOpen
-              : true,
-          })}
-        >
-          <EditorSchemaModal
-            selectedUISchema={selectedUISchemaAdj}
-            selectedSchema={selectedSchemaAdj}
-            selectedConfig={selectedConfigAdj}
-            editorUISchemaFiles={editorUISchemaFiles}
-            editorSchemaFiles={editorSchemaFiles}
-            editorConfigFiles={editorConfigFiles}
-            handleUiSchemaChange={this.handleUiSchemaChange}
-            handleSchemaChange={this.handleSchemaChange}
-            handleConfigChange={this.handleConfigChange}
-          />
-        </div> */}
-
         {/* 
-        
-        1) Find out why onClick is called on render and fix it 
-        2) or, remove the "none" part from the function 
+        1) Fix closing modals via X button
         3) Clean up code to use modalsInfoFull
         4) Change the editorTool for the schema loader to be standard type
 
