@@ -407,12 +407,10 @@ export class EditorSection extends React.Component {
       ? editorConfigFiles[0].name.replace(".json", "")
       : "None";
 
-    let sideBarOpen = editorSchemaSidebarOpen || modalsOpen.includes(true);
-
     let modalsInfoFull = modalsInfo.concat({
       name: "schema-modal",
       comment: "Schema & config loader",
-      class: "fa fa-cogs",
+      class: "fa fa-cog",
       modal: (
         <EditorSchemaModal
           selectedUISchema={selectedUISchemaAdj}
