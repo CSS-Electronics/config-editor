@@ -1,34 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as actionsEditor from "../editor/actions";
-import * as actionsEditorTools from "../editorTools/actions";
+import * as actionsEditor from "./actions";
 import EditorDropdown from "./EditorDropdown";
 
 class EditorSchemaModal extends React.Component {
   constructor(props) {
     super(props);
-    this.closeModal = this.closeModal.bind(this);
-  }
-
-  closeModal(e) {
-    this.setState({}, () => {
-      this.props.toggleEditorSchemaSideBar();
-    });
-  }
-
-  componentDidMount() {
-    if (!this.props.editorSchemaSidebarOpen) {
-      this.setState({}, () => {
-        this.props.toggleEditorSchemaSideBar();
-      });
-    }
-    
   }
 
   componentWillUnmount() {
     this.props.resetFiles()
   }
-
 
   render() {
     const {
@@ -47,10 +29,7 @@ class EditorSchemaModal extends React.Component {
     } = this.props;
 
     return (
-      <div className="tools-side-bar">
-        <button type="button" className="close" onClick={this.closeModal}>
-          <span style={{ color: "gray" }}>×</span>
-        </button>
+      <div>
         <h4>Schema & config loader</h4>
 
         <EditorDropdown
@@ -86,8 +65,6 @@ class EditorSchemaModal extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleEditorSchemaSideBar: () =>
-      dispatch(actionsEditorTools.toggleEditorSchemaSideBar()),
     handleUplodedUISchema: file =>
       dispatch(actionsEditor.handleUploadedUISchma(file)),
     handleUploadedSchema: file =>
@@ -98,14 +75,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const mapStateToProps = state => {
-  return {
-    // currentBucket: state.buckets.currentBucket,
-    editorSchemaSidebarOpen: state.editorTools.editorSchemaSidebarOpen
-  };
-};
-
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(EditorSchemaModal);

@@ -4,32 +4,42 @@ import { connect } from "react-redux";
 import "../../css/diff2html.min.css";
 import Select from "react-select";
 
-const selectOptions = Files => {
+const selectOptions = (Files) => {
   Files = _.orderBy(Files, ["name"], ["desc"]);
-  return [...Files, ...[{ name: "None" }]].map(File => ({
+  return [...Files, ...[{ name: "None" }]].map((File) => ({
     value: File.name,
-    label: File.name
+    label: File.name,
   }));
 };
 
 let pastCrc32 = "N/A";
 
-class EditorChangesComparison extends React.Component {
+const { detect } = require("detect-browser");
+const browser = detect();
 
+let crcBrowserSupport = [
+  "chrome",
+  "firefox",
+  "opera",
+  "safari",
+  "edge",
+].includes(browser.name);
+
+class EditorChangesComparison extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleCheckbox = this.toggleCheckbox.bind(this)
+    this.toggleCheckbox = this.toggleCheckbox.bind(this);
     this.state = {
-      hideWhiteSpace: true
+      hideWhiteSpace: true,
     };
   }
 
   toggleCheckbox = () => {
     this.setState({
-      hideWhiteSpace: !this.state.hideWhiteSpace
+      hideWhiteSpace: !this.state.hideWhiteSpace,
     });
-  }
-  
+  };
+
   render() {
     const {
       options,
@@ -39,18 +49,14 @@ class EditorChangesComparison extends React.Component {
       current,
       closeChangesModal,
       revisedConfigFile,
-      crcBrowserSupport,
-      crc32EditorLive
+      crc32EditorLive,
     } = this.props;
 
-    let pastCleaned = past ? JSON.stringify(JSON.parse(past),null,2) : ""
+    let pastCleaned = past ? JSON.stringify(JSON.parse(past), null, 2) : "";
 
     if (crcBrowserSupport == 1 && past) {
       const { crc32 } = require("crc");
-      pastCrc32 = crc32(past)
-        .toString(16)
-        .toUpperCase()
-        .padStart(8,"0")
+      pastCrc32 = crc32(past).toString(16).toUpperCase().padStart(8, "0");
     } else {
       pastCrc32 = "N/A";
     }
@@ -63,7 +69,7 @@ class EditorChangesComparison extends React.Component {
           </button>
           <div className="">
             <h4> Review changes </h4>
-        
+
             <div className="col-sm-6 zero-padding">
               <p>
                 Previous Configuration File{" "}
@@ -90,14 +96,16 @@ class EditorChangesComparison extends React.Component {
                   }
                 </p>
                 <div className="checkbox-white-space">
-                <label className="checkbox-design">
-            <input
-            label="Hide whitespace changes"
-            type="checkbox"
-            checked={this.state.hideWhiteSpace}
-            onChange={this.toggleCheckbox} /> <span>&nbsp;Hide whitespace changes</span>
-            </label>
-            </div>
+                  <label className="checkbox-design">
+                    <input
+                      label="Hide whitespace changes"
+                      type="checkbox"
+                      checked={this.state.hideWhiteSpace}
+                      onChange={this.toggleCheckbox}
+                    />{" "}
+                    <span>&nbsp;Hide whitespace changes</span>
+                  </label>
+                </div>
               </div>
             </div>
             <div className="col-sm-6 zero-padding">
@@ -118,10 +126,8 @@ class EditorChangesComparison extends React.Component {
                 <p className="field-description">
                   {"This will be the name of the new Configuration File"}
                 </p>
-               
               </div>
             </div>
-            
           </div>
         </div>
         <div className="modal-custom-content">
@@ -131,7 +137,7 @@ class EditorChangesComparison extends React.Component {
                 originalFileName: "original_config",
                 updatedFileName: "new_config",
                 matchWordsThreshold: 0.25,
-                matchingMaxComparisons: 5000
+                matchingMaxComparisons: 5000,
               }}
               past={this.state.hideWhiteSpace ? pastCleaned : past}
               current={JSON.stringify(current, null, 2)}
@@ -147,7 +153,7 @@ function mapStateToProps(state) {
   return {
     past: state.editor.configContentPreChange,
     current: state.editor.configContent,
-    crc32EditorLive: state.editorTools.crc32EditorLive
+    crc32EditorLive: state.editorTools.crc32EditorLive,
   };
 }
 

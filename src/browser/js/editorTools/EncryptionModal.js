@@ -1,24 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import OutputField from "./OutputField";
-import InputField from "./InputField";
+import OutputField from "./components/OutputField";
+import InputField from "./components/InputField";
 import * as actionsEncryption from "./actions";
 import * as actionsAlert from "../alert/actions";
 
 const options = [
   { value: "new", label: "Generate new encryption key" },
-  { value: "existing", label: "Use existing encryption key" }
+  { value: "existing", label: "Use existing encryption key" },
 ];
 
 class EncryptionModal extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.closeModal = this.closeModal.bind(this);
 
     this.state = {
-      selectedOption: options[0]
+      selectedOption: options[0],
     };
   }
 
@@ -26,10 +25,10 @@ class EncryptionModal extends React.Component {
     this.props.resetAllKeys();
   }
 
-  handleChange = selectedOption => {
+  handleChange = (selectedOption) => {
     this.setState(
       {
-        selectedOption
+        selectedOption,
       },
       () => {
         this.props.resetAllKeys();
@@ -37,21 +36,10 @@ class EncryptionModal extends React.Component {
     );
   };
 
-  closeModal(e) {
-    this.setState({}, () => {
-      this.props.toggleEncryptionSideBar();
-      this.props.resetAllKeys();
-    });
-  }
-
   render() {
     const { selectedOption } = this.state;
     return (
-      <div className="tools-side-bar">
-        <button type="button" className="close" onClick={this.closeModal}>
-          <span style={{ color: "gray" }}>×</span>
-        </button>
-
+      <div>
         <h4>Encryption tool</h4>
         <div className="form-group pl0 field-string">
           <p>Mode</p>
@@ -169,27 +157,22 @@ function mapStateToProps(state) {
     serverPublicKeyBase64: state.editorTools.serverPublicKeyBase64,
     symmetricKeyBase64: state.editorTools.symmetricKeyBase64,
     symmetricKey: state.editorTools.symmetricKey,
-    fieldValueEncryptedBase64: state.editorTools.fieldValueEncryptedBase64
+    fieldValueEncryptedBase64: state.editorTools.fieldValueEncryptedBase64,
   };
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    importDevicePublicKey: devicePublicKeyBase64 =>
+    importDevicePublicKey: (devicePublicKeyBase64) =>
       dispatch(actionsEncryption.importDevicePublicKey(devicePublicKeyBase64)),
-    importSymmetricKey: symmetricKeyBase64 =>
+    importSymmetricKey: (symmetricKeyBase64) =>
       dispatch(actionsEncryption.importSymmetricKey(symmetricKeyBase64)),
-    encryptField: fieldValuePlainText =>
+    encryptField: (fieldValuePlainText) =>
       dispatch(actionsEncryption.encryptField(fieldValuePlainText)),
     resetAllKeys: () => dispatch(actionsEncryption.resetAllKeys()),
     showAlert: (type, message) =>
       dispatch(actionsAlert.set({ type: type, message: message })),
-    toggleEncryptionSideBar: () =>
-      dispatch(actionsEncryption.toggleEncryptionSideBar())
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EncryptionModal);
+export default connect(mapStateToProps, mapDispatchToProps)(EncryptionModal);

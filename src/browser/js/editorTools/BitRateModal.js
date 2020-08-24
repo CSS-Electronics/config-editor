@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import InputFieldSimple from "./InputFieldSimple";
+import InputFieldSimple from "./components/InputFieldSimple";
 
 import * as actionsEditorTools from "./actions";
 import * as actionsAlert from "../alert/actions";
@@ -9,13 +9,12 @@ class BitRateModal extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.closeModal = this.closeModal.bind(this);
 
     this.state = {
       input1: "100",
       input2: "63",
       input3: "16",
-      input4: "4"
+      input4: "4",
     };
   }
 
@@ -24,13 +23,7 @@ class BitRateModal extends React.Component {
     const id = target.id;
 
     this.setState({
-      ["input" + id]: target.value
-    });
-  }
-
-  closeModal(e) {
-    this.setState({}, () => {
-      this.props.toggleBitRateSideBar();
+      ["input" + id]: target.value,
     });
   }
 
@@ -49,11 +42,7 @@ class BitRateModal extends React.Component {
       Math.round(100 * ((1 + input2) / (1 + input2 + input3)) * 1000) / 1000;
 
     return (
-      <div className="tools-side-bar">
-        <button type="button" className="close" onClick={this.closeModal}>
-          <span style={{ color: "gray" }}>×</span>
-        </button>
-
+      <div>
         <h4>Bit-timing calculator (advanced)</h4>
         <div>
           <InputFieldSimple
@@ -107,16 +96,11 @@ class BitRateModal extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message })),
-    toggleBitRateSideBar: () =>
-      dispatch(actionsEditorTools.toggleBitRateSideBar())
+      dispatch(actionsAlert.set({ type: type, message: message }))
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(BitRateModal);
+export default connect(null, mapDispatchToProps)(BitRateModal);

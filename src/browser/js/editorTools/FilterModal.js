@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import InputFieldSimple from "./InputFieldSimple";
-import OutputField from "./OutputField";
+import InputFieldSimple from "./components/InputFieldSimple";
+import OutputField from "./components/OutputField";
 
 import * as actionsEditorTools from "./actions";
 import * as actionsAlert from "../alert/actions";
@@ -10,23 +10,23 @@ import * as actionsAlert from "../alert/actions";
 const options = [
   { value: "standard", label: "Standard" },
   { value: "extended", label: "Extended" },
-  { value: "pgn", label: "J1939 PGN" }
+  { value: "pgn", label: "J1939 PGN" },
 ];
 
 const optionsData = [
   { value: "standard", mask: "7FF", idLength: 11 },
   { value: "extended", mask: "1FFFFFFF", idLength: 29 },
-  { value: "pgn", mask: "3FFFF", idLength: 18 }
+  { value: "pgn", mask: "3FFFF", idLength: 18 },
 ];
 
 const optionsBase = [
   { value: "hex", label: "HEX" },
-  { value: "dec", label: "DEC" }
+  { value: "dec", label: "DEC" },
 ];
 
 const optionsMatching = [
   { value: "range", label: "Range" },
-  { value: "mask", label: "Mask" }
+  { value: "mask", label: "Mask" },
 ];
 
 function reBase(n, fromBase, toBase) {
@@ -47,23 +47,22 @@ class FilterModal extends React.Component {
     this.handleChangeBase1 = this.handleChangeBase1.bind(this);
     this.handleChangeBase2 = this.handleChangeBase2.bind(this);
     this.handleChangeBase3 = this.handleChangeBase3.bind(this);
-    this.closeModal = this.closeModal.bind(this);
 
     this.state = {
       selOption: options[0],
       selOptionMatch: optionsMatching[1],
       input1: "",
-      input2: optionsData.filter(p => p.value == "standard")[0].mask,
+      input2: optionsData.filter((p) => p.value == "standard")[0].mask,
       input3: "",
       base1: optionsBase[0],
       base2: optionsBase[0],
-      base3: optionsBase[0]
+      base3: optionsBase[0],
     };
   }
 
-  handleChange = selOption => {
+  handleChange = (selOption) => {
     const value = selOption.value;
-    const defaultMask = optionsData.filter(p => p.value == value)[0].mask;
+    const defaultMask = optionsData.filter((p) => p.value == value)[0].mask;
 
     this.setState({
       selOption,
@@ -72,26 +71,26 @@ class FilterModal extends React.Component {
         this.state.base2.value == "hex"
           ? defaultMask
           : reBase(defaultMask, 16, 10),
-      input3: ""
+      input3: "",
     });
 
     if (value == "pgn") {
       this.setState({
-        selOptionMatch: optionsMatching[1]
+        selOptionMatch: optionsMatching[1],
       });
     }
   };
 
-  handleChangeBase1 = base => {
+  handleChangeBase1 = (base) => {
     this.setState({
       base1: base,
-      input1: ""
+      input1: "",
     });
   };
 
-  handleChangeBase2 = base => {
+  handleChangeBase2 = (base) => {
     const defaultMask = optionsData.filter(
-      p => p.value == this.state.selOption.value
+      (p) => p.value == this.state.selOption.value
     )[0].mask;
 
     this.setState({
@@ -101,14 +100,14 @@ class FilterModal extends React.Component {
           ? base.value == "hex"
             ? defaultMask
             : reBase(defaultMask, 16, 10)
-          : ""
+          : "",
     });
   };
 
-  handleChangeBase3 = base => {
+  handleChangeBase3 = (base) => {
     this.setState({
       base3: base,
-      input3: ""
+      input3: "",
     });
   };
 
@@ -129,14 +128,14 @@ class FilterModal extends React.Component {
 
     if (valueBinLength <= maxLength && target.value.match(baseRegex) != null) {
       this.setState({
-        ["input" + id]: target.value
+        ["input" + id]: target.value,
       });
     }
   }
 
-  handleChangeMatching = selOptionMatch => {
+  handleChangeMatching = (selOptionMatch) => {
     const defaultMask = optionsData.filter(
-      p => p.value == this.state.selOption.value
+      (p) => p.value == this.state.selOption.value
     )[0].mask;
     const defaultMaskReBased =
       this.state.base2.value == "hex"
@@ -147,17 +146,11 @@ class FilterModal extends React.Component {
       {
         selOptionMatch,
         input1: "",
-        input2: selOptionMatch.value == "range" ? "" : defaultMaskReBased
+        input2: selOptionMatch.value == "range" ? "" : defaultMaskReBased,
       },
       () => {}
     );
   };
-
-  closeModal(e) {
-    this.setState({}, () => {
-      this.props.toggleFilterSideBar();
-    });
-  }
 
   render() {
     const {
@@ -168,7 +161,7 @@ class FilterModal extends React.Component {
       base3,
       input1,
       input2,
-      input3
+      input3,
     } = this.state;
 
     const field1Hex = input1
@@ -196,7 +189,7 @@ class FilterModal extends React.Component {
     const field3Masked =
       field3Hex != "" && field2Hex != "" ? field3Dec & field2Dec : null;
 
-    const idLength = optionsData.filter(p => p.value == selOption.value)[0]
+    const idLength = optionsData.filter((p) => p.value == selOption.value)[0]
       .idLength;
 
     const headerText1 =
@@ -233,11 +226,7 @@ class FilterModal extends React.Component {
           ).toUpperCase();
 
     return (
-      <div className="tools-side-bar">
-        <button type="button" className="close" onClick={this.closeModal}>
-          <span style={{ color: "gray" }}>×</span>
-        </button>
-
+      <div>
         <h4>CAN ID filter entry checker</h4>
         <div className="row no-gutters">
           <div className="form-group field-string col-md-6">
@@ -406,16 +395,11 @@ class FilterModal extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message })),
-    toggleFilterSideBar: () =>
-      dispatch(actionsEditorTools.toggleFilterSideBar())
+      dispatch(actionsAlert.set({ type: type, message: message }))
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(FilterModal);
+export default connect(null, mapDispatchToProps)(FilterModal);

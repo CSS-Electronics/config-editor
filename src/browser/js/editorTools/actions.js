@@ -6,17 +6,8 @@ export const SET_SERVER_SECRET_KEY = "editorTools/SET_SERVER_SECRET_KEY";
 export const SET_SYMMETRIC_KEY_BASE64 = "editorTools/SET_SYMMETRIC_KEY_BASE64";
 export const SET_SYMMETRIC_KEY = "editorTools/SET_SYMMETRIC_KEY";
 export const SET_ENCRYPTED_FIELD = "editorTools/SET_ENCRYPTED_FIELD";
-export const TOGGLE_ENCRYPTION_SIDEBAR =
-  "editorTools/TOGGLE_ENCRYPTION_SIDEBAR";
-export const TOGGLE_SCHEMA_SIDEBAR = "editorTools/TOGGLE_SCHEMA_SIDEBAR";
-export const TOGGLE_FILTER_SIDEBAR = "editorTools/TOGGLE_FILTER_SIDEBAR";
-export const TOGGLE_DEVICE_FILE_TABLE = "editorTools/TOGGLE_DEVICE_FILE_TABLE";
-export const TOGGLE_CRC_SIDEBAR = "editorTools/TOGGLE_CRC_SIDEBAR";
-export const TOGGLE_BITRATE_SIDEBAR = "editorTools/TOGGLE_BITRATE_SIDEBAR";
-export const TOGGLE_PARTIAL_CONFIG_LOADER_SIDEBAR = "editorTools/TOGGLE_PARTIAL_CONFIG_LOADER_SIDEBAR";
 export const SET_CRC32_EDITOR_LIVE = "editorTools/SET_CRC32_EDITOR_LIVE";
 export const SET_CRC32_EDITOR_PRE = "editorTools/SET_CRC32_EDITOR_PRE";
-export const CLOSE_EDITOR_SIDEBARS = " editorTools/CLOSE_EDITOR_SIDEBARS";
 
 const { detect } = require("detect-browser");
 const browser = detect();
@@ -34,34 +25,6 @@ if (
 } else {
   crcBrowserSupport = 1;
 }
-
-export const toggleDeviceFileTable = () => ({
-  type: TOGGLE_DEVICE_FILE_TABLE
-});
-
-export const toggleEditorSchemaSideBar = () => ({
-  type: TOGGLE_SCHEMA_SIDEBAR
-});
-
-export const toggleBitRateSideBar = () => ({
-  type: TOGGLE_BITRATE_SIDEBAR
-});
-
-export const togglePartialConfigLoaderSideBar = () => ({
-  type: TOGGLE_PARTIAL_CONFIG_LOADER_SIDEBAR
-});
-
-export const closeEditorToolsSideBars = () => ({
-  type: CLOSE_EDITOR_SIDEBARS
-});
-
-export const toggleFilterSideBar = () => ({
-  type: TOGGLE_FILTER_SIDEBAR
-});
-
-export const toggleCrcSideBar = () => ({
-  type: TOGGLE_CRC_SIDEBAR
-});
 
 
 export const calcCrc32EditorLive = () => {
@@ -415,6 +378,3 @@ export const resetAllKeys = () => {
   };
 };
 
-export const toggleEncryptionSideBar = () => ({
-  type: TOGGLE_ENCRYPTION_SIDEBAR
-});
