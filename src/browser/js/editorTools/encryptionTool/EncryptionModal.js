@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import OutputField from "./components/OutputField";
-import InputField from "./components/InputField";
+import OutputField from "../components/OutputField";
+import InputField from "../components/InputField";
 import * as actionsEncryption from "./actions";
-import * as actionsAlert from "../alert/actions";
+import * as actionsAlert from "../../alert/actions";
 
 const options = [
   { value: "new", label: "Generate new encryption key" },

@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import InputFieldSimple from "./components/InputFieldSimple";
+import InputFieldSimple from "../components/InputFieldSimple";
 
-import * as actionsEditorTools from "./actions";
-import * as actionsAlert from "../alert/actions";
+import * as actionsEditorTools from "../encryptionTool/actions";
+import * as actionsAlert from "../../alert/actions";
 
 class BitRateModal extends React.Component {
   constructor(props) {

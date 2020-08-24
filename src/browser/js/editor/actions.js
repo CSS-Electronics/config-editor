@@ -1,6 +1,5 @@
 import saveAs from "file-saver";
 import * as alertActions from "../alert/actions";
-import * as actionsEditorTools from "../editorTools/actions";
 
 export const SET_SCHEMA_LIST = "editor/SET_SCHEMA_LIST";
 export const SET_CONFIG_LIST = "editor/SET_CONFIG_LIST";
@@ -22,6 +21,8 @@ export const SET_UPDATED_FORM_DATA = "editor/SET_UPDATED_FORM_DATA";
 export const SET_ACTIVE_NAV = "editor/SET_ACTIVE_NAV";
 export const SET_UISCHEMA_SOURCE = "editor/SET_UISCHEMA_SOURCE";
 export const SET_CONFIG_DATA_LOCAL = "SET_CONFIG_DATA_LOCAL";
+export const SET_CRC32_EDITOR_LIVE = "SET_CRC32_EDITOR_LIVE";
+
 
 // Toggle demo mode on/off
 const demoMode = false 
@@ -34,6 +35,51 @@ const isValidUISchema = file => {
   );
   return regexUiSchema.test(file);
 };
+
+
+const { detect } = require("detect-browser");
+const browser = detect();
+
+let crcBrowserSupport = 0;
+
+if (
+  browser.name != "chrome" &&
+  browser.name != "firefox" &&
+  browser.name != "opera" &&
+  browser.name != "safari" &&
+  browser.name != "edge"
+) {
+  crcBrowserSupport = 0;
+} else {
+  crcBrowserSupport = 1;
+}
+
+
+export const calcCrc32EditorLive = () => {
+  return function(dispatch, getState) {
+    let formData = getState().editor.formData
+
+    if (crcBrowserSupport == 1 && formData) {
+
+      const { crc32 } = require("crc");
+      let crc32EditorLive = crc32(JSON.stringify(formData, null, 2))
+        .toString(16)
+        .toUpperCase()
+        .padStart(8,"0")
+
+        dispatch(setCrc32EditorLive(crc32EditorLive));
+      } else {
+      let crc32EditorLive = `N/A`;
+      dispatch(setCrc32EditorLive(crc32EditorLive));
+    }
+
+  };
+};
+
+export const setCrc32EditorLive = crc32EditorLive => ({
+  type: SET_CRC32_EDITOR_LIVE,
+  crc32EditorLive
+});
 
 
 const isValidSchema = file => {
@@ -378,7 +424,7 @@ export const saveUpdatedConfiguration = (filename, content) => {
 export const setUpdatedFormData = formData => {
   return function(dispatch) {
     dispatch(setUpdatedFormDataValue(formData));
-    dispatch(actionsEditorTools.calcCrc32EditorLive());
+    dispatch(calcCrc32EditorLive());
   };
 };
 

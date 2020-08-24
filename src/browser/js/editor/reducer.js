@@ -8,11 +8,17 @@ export default (
     editorUISchemaFiles: [],
     configContentPreChange: "",
     configContentLocal: {},
-    formData: {}
+    formData: {},
+    crc32EditorLive: ""
   },
   action
 ) => {
   switch (action.type) {
+    case actionsEditor.SET_CRC32_EDITOR_LIVE:
+      return {
+        ...state,
+        crc32EditorLive: action.crc32EditorLive
+      };
     case actionsEditor.RESET_SCHEMA_FILES:
       return {
         editorSchemaFiles: [],

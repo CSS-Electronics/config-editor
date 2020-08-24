@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import InputFieldSimple from "./components/InputFieldSimple";
-import OutputField from "./components/OutputField";
+import InputFieldSimple from "../components/InputFieldSimple";
+import OutputField from "../components/OutputField";
 
-import * as actionsEditorTools from "./actions";
-import * as actionsAlert from "../alert/actions";
+import * as actionsEditorTools from "../encryptionTool/actions";
+import * as actionsAlert from "../../alert/actions";
 
 const options = [
   { value: "standard", label: "Standard" },

@@ -1,24 +1,29 @@
 import React from "react";
 import { connect } from "react-redux";
-import applyNav from "react-jsonschema-form-pagination";
+
 import Form from "react-jsonschema-form";
+import applyNav from "react-jsonschema-form-pagination";
+import classNames from "classnames";
+
 import EditorSchemaModal from "./EditorSchemaModal";
 import PartialConfigLoader from "./PartialConfigLoader";
 
 import EditorToolButton from "./EditorToolButton";
-import EditorNavs from "./EditorNavs";
 import ModalWrapper from "./ModalWrapper";
 
+import EditorNavs from "./EditorNavs";
 import EditorArrayFieldTemplate from "./EditorArrayFieldTemplate";
+import EditorChangesComparison from "./EditorChangesComparison";
+import AlertContainer from "../alert/AlertContainer";
+
 import * as actionsEditor from "./actions";
 import * as alertActions from "../alert/actions";
-import EditorChangesComparison from "./EditorChangesComparison";
-import classNames from "classnames";
-import AlertContainer from "../alert/AlertContainer";
+
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
 let isDownloadConfig = false;
 let activatedTab;
+
 
 export class EditorSection extends React.Component {
   constructor(props) {
@@ -73,7 +78,6 @@ export class EditorSection extends React.Component {
   }
 
   subMenuBtnClick(name) {
-    console.log("name:", name);
     let sideBar = this.state.activeSideBar == name ? "none" : name;
 
     this.setState(
@@ -567,7 +571,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionsEditor.setUpdatedFormData(formData)),
     setConfigContentPreSubmit: () =>
       dispatch(actionsEditor.setConfigContentPreSubmit()),
-    publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
+    publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles())
   };
 };
 

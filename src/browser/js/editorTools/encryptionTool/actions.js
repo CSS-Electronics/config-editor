@@ -1,4 +1,4 @@
-import * as alertActions from "../alert/actions";
+import * as alertActions from "../../alert/actions";
 
 export const SET_DEVICE_PUBLIC_KEY = "editorTools/SET_DEVICE_PUBLIC_KEY";
 export const SET_SERVER_PUBLIC_KEY = "editorTools/SET_SERVER_PUBLIC_KEY";
@@ -6,57 +6,9 @@ export const SET_SERVER_SECRET_KEY = "editorTools/SET_SERVER_SECRET_KEY";
 export const SET_SYMMETRIC_KEY_BASE64 = "editorTools/SET_SYMMETRIC_KEY_BASE64";
 export const SET_SYMMETRIC_KEY = "editorTools/SET_SYMMETRIC_KEY";
 export const SET_ENCRYPTED_FIELD = "editorTools/SET_ENCRYPTED_FIELD";
-export const SET_CRC32_EDITOR_LIVE = "editorTools/SET_CRC32_EDITOR_LIVE";
-export const SET_CRC32_EDITOR_PRE = "editorTools/SET_CRC32_EDITOR_PRE";
 
 const { detect } = require("detect-browser");
 const browser = detect();
-
-let crcBrowserSupport = 0;
-
-if (
-  browser.name != "chrome" &&
-  browser.name != "firefox" &&
-  browser.name != "opera" &&
-  browser.name != "safari" &&
-  browser.name != "edge"
-) {
-  crcBrowserSupport = 0;
-} else {
-  crcBrowserSupport = 1;
-}
-
-
-export const calcCrc32EditorLive = () => {
-  return function(dispatch, getState) {
-    let formData = getState().editor.formData
-
-    if (crcBrowserSupport == 1 && formData) {
-
-      const { crc32 } = require("crc");
-      let crc32EditorLive = crc32(JSON.stringify(formData, null, 2))
-        .toString(16)
-        .toUpperCase()
-        .padStart(8,"0")
-
-        dispatch(setCrc32EditorLive(crc32EditorLive));
-      } else {
-      let crc32EditorLive = `N/A`;
-      dispatch(setCrc32EditorLive(crc32EditorLive));
-    }
-
-  };
-};
-
-export const setCrc32EditorLive = crc32EditorLive => ({
-  type: SET_CRC32_EDITOR_LIVE,
-  crc32EditorLive
-});
-
-export const setCrc32EditorPre = crc32EditorPre => ({
-  type: SET_CRC32_EDITOR_PRE,
-  crc32EditorPre
-});
 
 // convert BufferArray to Base64 string
 function arrayBufferToBase64(buffer) {

@@ -2,9 +2,9 @@ import React from "react";
 
 import EditorSection from "./EditorSection";
 
-import EncryptionModal from "../editorTools/EncryptionModal";
-import FilterModal from "../editorTools/FilterModal";
-import BitRateModal from "../editorTools/BitRateModal";
+import EncryptionModal from "../editorTools/encryptionTool/EncryptionModal";
+import FilterModal from "../editorTools/filterTool/FilterModal";
+import BitRateModal from "../editorTools/bitRateTool/BitRateModal";
 
 class Editor extends React.Component {
   render() {

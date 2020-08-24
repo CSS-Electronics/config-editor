@@ -6,8 +6,6 @@ export default (
     filterSidebarOpen: false,
     bitRateSidebarOpen: false,
     partialConfigLoaderSidebarOpen: false,
-    crc32EditorLive: "",
-    crc32EditorPre: "",
     deviceFileTableOpen: false,
     editorSchemaSidebarOpen: true,
     crcSidebarOpen: false,
@@ -20,16 +18,6 @@ export default (
   action
 ) => {
   switch (action.type) {
-    case actionsEditorTools.SET_CRC32_EDITOR_LIVE:
-      return {
-        ...state,
-        crc32EditorLive: action.crc32EditorLive
-      };
-    case actionsEditorTools.SET_CRC32_EDITOR_PRE:
-      return {
-        ...state,
-        crc32EditorPre: action.crc32EditorPre
-      };
     case actionsEditorTools.SET_DEVICE_PUBLIC_KEY:
       return {
         ...state,
