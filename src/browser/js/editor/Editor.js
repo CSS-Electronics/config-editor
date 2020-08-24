@@ -1,6 +1,6 @@
 import React from "react";
 
-import EditorSection from "./EditorSection";
+import EditorSection from "./editorBase/EditorSection";
 
 import EncryptionModal from "../editorTools/encryptionTool/EncryptionModal";
 import FilterModal from "../editorTools/filterTool/FilterModal";

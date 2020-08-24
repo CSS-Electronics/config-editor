@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as actionsEditor from "../actions";
+import * as actionsEditor from "../editorBase/actions";
 import EditorDropdown from "./EditorDropdown";
 
 class EditorSchemaModal extends React.Component {
@@ -68,10 +68,10 @@ const mapDispatchToProps = dispatch => {
     handleUplodedUISchema: file =>
       dispatch(actionsEditor.handleUploadedUISchma(file)),
     handleUploadedSchema: file =>
-      dispatch(actionsEditor.handleUploadedSchma(file)),
+      dispatch(actionsEditor.handleUploadedSchema(file)),
     handleUploadedConfig: file =>
       dispatch(actionsEditor.handleUploadedConfig(file)),
-      resetFiles: () => dispatch(actionsEditor.resetFiles())
+    resetFiles: () => dispatch(actionsEditor.resetFiles())
   };
 };
 

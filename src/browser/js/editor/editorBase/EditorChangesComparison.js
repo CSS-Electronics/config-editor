@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactGhLikeDiff } from "react-gh-like-diff";
 import { connect } from "react-redux";
-import "../../css/diff2html.min.css";
+import "../../../css/diff2html.min.css";
 import Select from "react-select";
 
 const selectOptions = (Files) => {

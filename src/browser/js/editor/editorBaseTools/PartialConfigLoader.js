@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Files from "react-files";
 import * as actionsAlert from "../../alert/actions";
-import * as actionsEditor from "../actions";
+import * as actionsEditor from "../editorBase/actions";
 import Form from "react-jsonschema-form";
 
 let yourForm;

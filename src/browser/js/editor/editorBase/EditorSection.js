@@ -5,19 +5,19 @@ import Form from "react-jsonschema-form";
 import applyNav from "react-jsonschema-form-pagination";
 import classNames from "classnames";
 
-import EditorSchemaModal from "./editorToolsBase/EditorSchemaModal";
-import PartialConfigLoader from "./editorToolsBase/PartialConfigLoader";
+import EditorSchemaModal from "../editorBaseTools/EditorSchemaModal";
+import PartialConfigLoader from "../editorBaseTools/PartialConfigLoader";
 
-import EditorToolButton from "./editorToolsBase/EditorToolButton";
-import EditorToolModalWrapper from "./editorToolsBase/EditorToolModalWrapper";
+import EditorToolButton from "../editorBaseTools/EditorToolButton";
+import EditorToolModalWrapper from "../editorBaseTools/EditorToolModalWrapper";
 
 import EditorNavs from "./EditorNavs";
 import EditorArrayFieldTemplate from "./EditorArrayFieldTemplate";
 import EditorChangesComparison from "./EditorChangesComparison";
-import AlertContainer from "../alert/AlertContainer";
+import AlertContainer from "../../alert/AlertContainer";
 
 import * as actionsEditor from "./actions";
-import * as alertActions from "../alert/actions";
+import * as alertActions from "../../alert/actions";
 
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
@@ -64,19 +64,7 @@ export class EditorSection extends React.Component {
       this.closeChangesModal();
     }
   }
-
-  handleUiSchemaChange(selection) {
-    this.setState(
-      {
-        uischema: selection,
-        selectedUISchema: selection,
-      },
-      () => {
-        this.props.fetchUISchemaContent(this.state.uischema);
-      }
-    );
-  }
-
+  
   subMenuBtnClick(name) {
     let sideBar = this.state.activeSideBar == name ? "none" : name;
 
@@ -86,6 +74,18 @@ export class EditorSection extends React.Component {
       },
       () => {
         this.props.setConfigContentPreSubmit();
+      }
+    );
+  }
+
+  handleUiSchemaChange(selection) {
+    this.setState(
+      {
+        uischema: selection,
+        selectedUISchema: selection,
+      },
+      () => {
+        this.props.fetchUISchemaContent(this.state.uischema);
       }
     );
   }
@@ -554,8 +554,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateConfigFile: (content, object) =>
-      dispatch(actionsEditor.updateConfigFile(content, object)),
     fetchConfigContent: (filename, type) =>
       dispatch(actionsEditor.fetchConfigContent(filename, type)),
     fetchSchemaContent: (schema) =>
