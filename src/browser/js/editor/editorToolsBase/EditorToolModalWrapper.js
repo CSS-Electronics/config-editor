@@ -1,6 +1,6 @@
 import React from "react";
 
-class ModalWrapper extends React.Component{
+class EditorToolModalWrapper extends React.Component{
   constructor(props) {
     super(props);
   }
@@ -18,4 +18,4 @@ class ModalWrapper extends React.Component{
   }
 }
 
-export default ModalWrapper
+export default EditorToolModalWrapper

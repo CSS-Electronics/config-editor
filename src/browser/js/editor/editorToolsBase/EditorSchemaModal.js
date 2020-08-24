@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as actionsEditor from "./actions";
+import * as actionsEditor from "../actions";
 import EditorDropdown from "./EditorDropdown";
 
 class EditorSchemaModal extends React.Component {

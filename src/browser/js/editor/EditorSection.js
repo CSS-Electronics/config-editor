@@ -5,11 +5,11 @@ import Form from "react-jsonschema-form";
 import applyNav from "react-jsonschema-form-pagination";
 import classNames from "classnames";
 
-import EditorSchemaModal from "./EditorSchemaModal";
-import PartialConfigLoader from "./PartialConfigLoader";
+import EditorSchemaModal from "./editorToolsBase/EditorSchemaModal";
+import PartialConfigLoader from "./editorToolsBase/PartialConfigLoader";
 
-import EditorToolButton from "./EditorToolButton";
-import ModalWrapper from "./ModalWrapper";
+import EditorToolButton from "./editorToolsBase/EditorToolButton";
+import EditorToolModalWrapper from "./editorToolsBase/EditorToolModalWrapper";
 
 import EditorNavs from "./EditorNavs";
 import EditorArrayFieldTemplate from "./EditorArrayFieldTemplate";
@@ -414,7 +414,7 @@ export class EditorSection extends React.Component {
                   display: modal.name == this.state.activeSideBar ? "" : "none",
                 }}
               >
-                <ModalWrapper
+                <EditorToolModalWrapper
                   modal={modal.modal}
                   onClick={() => this.subMenuBtnClick("none")}
                 />

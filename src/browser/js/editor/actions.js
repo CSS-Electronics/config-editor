@@ -81,7 +81,6 @@ export const setCrc32EditorLive = crc32EditorLive => ({
   crc32EditorLive
 });
 
-
 const isValidSchema = file => {
   const regexSchema = new RegExp(
     "(^([0-9A-Fa-f]){8}_|server_|^)schema-\\d{2}\\.\\d{2}\\.json",
