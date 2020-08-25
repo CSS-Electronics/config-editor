@@ -153,7 +153,7 @@ function mapStateToProps(state) {
   return {
     past: state.editor.configContentPreChange,
     current: state.editor.configContent,
-    crc32EditorLive: state.editorTools.crc32EditorLive,
+    crc32EditorLive: state.editor.crc32EditorLive,
   };
 }
 
