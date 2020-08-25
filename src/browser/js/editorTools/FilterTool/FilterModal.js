@@ -1,9 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
 import Select from "react-select";
 import InputFieldSimple from "../components/InputFieldSimple";
 import OutputField from "../components/OutputField";
-import * as actionsAlert from "../../alert/actions";
 
 const options = [
   { value: "standard", label: "Standard" },
@@ -393,11 +391,4 @@ class FilterModal extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message }))
-  };
-};
-
-export default connect(null, mapDispatchToProps)(FilterModal);
+export default FilterModal;

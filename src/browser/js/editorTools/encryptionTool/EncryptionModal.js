@@ -4,7 +4,6 @@ import Select from "react-select";
 import OutputField from "../components/OutputField";
 import InputField from "../components/InputField";
 import * as actionsEncryption from "./actions";
-import * as actionsAlert from "../../alert/actions";
 
 const options = [
   { value: "new", label: "Generate new encryption key" },
@@ -170,8 +169,6 @@ const mapDispatchToProps = (dispatch) => {
     encryptField: (fieldValuePlainText) =>
       dispatch(actionsEncryption.encryptField(fieldValuePlainText)),
     resetAllKeys: () => dispatch(actionsEncryption.resetAllKeys()),
-    showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message })),
   };
 };
 

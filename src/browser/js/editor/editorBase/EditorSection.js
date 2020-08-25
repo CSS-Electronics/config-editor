@@ -564,7 +564,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionsEditor.fetchUISchemaContent(uiSchema)),
     saveUpdatedConfiguration: (filename, content) =>
       dispatch(actionsEditor.saveUpdatedConfiguration(filename, content)),
-    showAlert: (alert) => dispatch(alertActions.set(alert)),
     setUpdatedFormData: (formData) =>
       dispatch(actionsEditor.setUpdatedFormData(formData)),
     setConfigContentPreSubmit: () =>

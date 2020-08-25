@@ -1,8 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
 import InputFieldSimple from "../components/InputFieldSimple";
-
-import * as actionsAlert from "../../alert/actions";
 
 class BitRateModal extends React.Component {
   constructor(props) {
@@ -95,11 +92,4 @@ class BitRateModal extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message }))
-  };
-};
-
-export default connect(null, mapDispatchToProps)(BitRateModal);
+export default BitRateModal

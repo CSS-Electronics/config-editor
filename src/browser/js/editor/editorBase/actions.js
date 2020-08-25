@@ -454,17 +454,3 @@ export const resetConfigFiles = () => ({
 export const resetLocalConfigList = () => ({
   type: RESET_LOCAL_CONFIG_LIST,
 });
-
-// -------------------------------------------------------
-// OTHER:
-export const showValidationAlert = () => {
-  return function (dispatch) {
-    dispatch(
-      alertActions.set({
-        type: "danger",
-        message: `Warning: The updated configuration contains validation errors - please review and try again`,
-        autoClear: true,
-      })
-    );
-  };
-};
