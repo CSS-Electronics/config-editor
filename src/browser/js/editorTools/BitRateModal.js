@@ -1,5 +1,5 @@
 import React from "react";
-import InputFieldSimple from "../components/InputFieldSimple";
+import InputFieldSimple from "./components/InputFieldSimple";
 
 class BitRateModal extends React.Component {
   constructor(props) {

@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
-import InputFieldSimple from "../components/InputFieldSimple";
-import OutputField from "../components/OutputField";
+import InputFieldSimple from "./components/InputFieldSimple";
+import OutputField from "./components/OutputField";
 
 const options = [
   { value: "standard", label: "Standard" },
