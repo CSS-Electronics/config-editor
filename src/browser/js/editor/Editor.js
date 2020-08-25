@@ -1,11 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import {EncryptionModal, FilterModal, BitRateModal} from 'config-editor-tools'
+
 import EditorSection from "./editorBase/EditorSection";
 
-import EncryptionModal from "../editorTools/EncryptionModal";
-import FilterModal from "../editorTools/FilterModal";
-import BitRateModal from "../editorTools/BitRateModal";
+// import EncryptionModal from "../editorTools/EncryptionModal";
+// import FilterModal from "../editorTools/FilterModal";
+// import BitRateModal from "../editorTools/BitRateModal";
 
 import * as actionsAlert from "../alert/actions";
 
