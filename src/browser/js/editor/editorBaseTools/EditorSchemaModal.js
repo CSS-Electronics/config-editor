@@ -37,7 +37,7 @@ class EditorSchemaModal extends React.Component {
           name="Presentation Mode"
           selected={selectedUISchema}
           onChange={handleUiSchemaChange}
-          handleUplodedFile={handleUplodedUISchema}
+          handleUploadedFile={handleUplodedUISchema}
           customBackground={true}
           comment="The UIschema affects the visual presentation of the editor. It does not impact the Configuration File. It can also be used to hide e.g. advanced settings via a Simple variant - or show all settings via an Advanced variant."
         />
@@ -46,7 +46,7 @@ class EditorSchemaModal extends React.Component {
           name="Rule Schema"
           selected={selectedSchema}
           onChange={handleSchemaChange}
-          handleUplodedFile={handleUploadedSchema}
+          handleUploadedFile={handleUploadedSchema}
           customBackground={true}
           comment="The Rule Schema serves as a guide for populating the Configuration File - and for automatically validating a Configuration File."
         /><hr/>
@@ -55,7 +55,7 @@ class EditorSchemaModal extends React.Component {
           name="Configuration File"
           selected={selectedConfig}
           onChange={handleConfigChange}
-          handleUplodedFile={handleUploadedConfig}
+          handleUploadedFile={handleUploadedConfig}
           comment="The Configuration File contains the settings that will be used on the device. You can upload a new Configuration File via the dropdown to modify it using the editor."
         />
       </div>
@@ -66,7 +66,7 @@ class EditorSchemaModal extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     handleUplodedUISchema: file =>
-      dispatch(actionsEditor.handleUploadedUISchma(file)),
+      dispatch(actionsEditor.handleUploadedUISchema(file)),
     handleUploadedSchema: file =>
       dispatch(actionsEditor.handleUploadedSchema(file)),
     handleUploadedConfig: file =>

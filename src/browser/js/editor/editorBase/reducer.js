@@ -9,8 +9,7 @@ export default (
     configContentPreChange: "",
     configContentLocal: {},
     formData: {},
-    crc32EditorLive: "",
-    configContent: {}
+    crc32EditorLive: ""
   },
   action
 ) => {
@@ -123,11 +122,6 @@ export default (
       return {
         ...state,
         configContentLocal: action.configContentLocal
-      };
-    case actionsEditor.SET_CONFIG_NAME_PRE_CHANGE:
-      return {
-        ...state,
-        configNamePreChange: action.configNamePreChange
       };
     case actionsEditor.SET_UPDATED_FORM_DATA:
       return {

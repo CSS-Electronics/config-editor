@@ -14,12 +14,8 @@ import EditorToolModalWrapper from "../editorBaseTools/EditorToolModalWrapper";
 import EditorNavs from "./EditorNavs";
 import EditorArrayFieldTemplate from "./EditorArrayFieldTemplate";
 import EditorChangesComparison from "./EditorChangesComparison";
-import AlertContainer from "../../alert/AlertContainer";
 
 import * as actionsEditor from "./actions";
-import * as alertActions from "../../alert/actions";
-
-import { crcBrowserSupport } from "./utils";
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
 let isDownloadConfig = false;
@@ -39,12 +35,6 @@ export class EditorSection extends React.Component {
     this.escFunction = this.escFunction.bind(this);
     this.subMenuBtnClick = this.subMenuBtnClick.bind(this);
 
-    this.setConfigContent = this.setConfigContent.bind(this)
-    this.FormWithNav = applyNav(Form, EditorNavs)
-
-    this.calcCrc32EditorLive = this.calcCrc32EditorLive.bind(this);
-    // this.setUpdatedFormData = this.setUpdatedFormData.bind(this);
-
     this.state = {
       uischema: "",
       schema: "",
@@ -60,47 +50,10 @@ export class EditorSection extends React.Component {
       isDownloadConfig: false,
       isCompareChanges: false,
       activeSideBar: "schema-modal",
-
-      formDataContent: {},
-      editorSchemaFiles: [],
-      editorConfigFiles: [],
-      editorUISchemaFiles: [],
-      configContentPreChange: "",
-      configContentLocal: {},
-      crc32EditorLive: "",
-
-      configContent: {}
     };
 
     this.input = "";
   }
-
-  calcCrc32EditorLive = (formData) => {
-    let formDataInput = formData;
-    let crc32EditorLive = "";
-
-    if (crcBrowserSupport == 1 && formDataInput) {
-      const { crc32 } = require("crc");
-      crc32EditorLive = crc32(JSON.stringify(formDataInput, null, 2))
-        .toString(16)
-        .toUpperCase()
-        .padStart(8, "0");
-    } else {
-      crc32EditorLive = `N/A`;
-    }
-
-    this.setState({
-      crc32EditorLive: crc32EditorLive,
-    });
-  };
-
-  // setUpdatedFormData = (formData) => {
-  //   console.log("we update formData", this.state.formDataContent)
-  //   this.setState({
-  //     formDataContent: formData,
-  //   });
-  //   // this.calcCrc32EditorLive(formData);
-  // };
 
   escFunction(event) {
     if (event.keyCode === 27) {
@@ -119,16 +72,6 @@ export class EditorSection extends React.Component {
         this.props.setConfigContentPreSubmit();
       }
     );
-  }
-
-  setConfigContent = (formData) => {
-    console.log("do we even get here?")
-    this.setState(
-      {
-        configContent: formData,
-      }
-    );
-      console.log("TEST",this.state.configContent)
   }
 
   handleUiSchemaChange(selection) {
@@ -203,26 +146,11 @@ export class EditorSection extends React.Component {
     document.addEventListener("keydown", this.escFunction, false);
   }
 
-
   componentWillUnMount() {
     document.removeEventListener("keydown", this.escFunction, false);
   }
 
-
-  // 1 Test in the simplest case via create-creat-app
-  // 2) Try updating to latest versions
-
   componentWillReceiveProps(nextProps) {
-
-    console.log("this.props",this.props.configContent)
-    console.log("nextprops",nextProps.configContent)
-    if(this.props.configContent != nextProps.configContent){
-      console.log("NO MATCH")
-      this.setState({
-        formData: nextProps.configContent
-      })
-    }
-
     // ensure that if there's a new schema file list, the selection returns to the default value
     if (this.props.editorSchemaFiles != nextProps.editorSchemaFiles) {
       this.setState({
@@ -290,16 +218,11 @@ export class EditorSection extends React.Component {
   }
 
   onSubmit({ formData }) {
-    console.log("we submit?")
     if (
       this.props.schemaContent == undefined ||
       this.props.schemaContent == null
     ) {
-      this.props.showAlert({
-        type: "info",
-        message: "No Rule Schema has been loaded",
-        autoClear: true,
-      });
+      this.props.showAlert("info", "No Rule Schema has been loaded");
       return;
     }
 
@@ -371,17 +294,14 @@ export class EditorSection extends React.Component {
 
   handleError(errors) {
     isDownloadConfig = false;
-    this.props.showAlert({
-      type: "danger",
-      message:
-        "The config contains validation errors (see top of editor) - please review and try again",
-      autoClear: true,
-    });
+    this.props.showAlert(
+      "danger",
+      "The config contains validation errors (see top of editor) - please review and try again"
+    );
   }
 
   handleChange = ({ formData }) => {
-    // this.props.setUpdatedFormData(formData);
-    this.setState({formData});
+    this.props.setUpdatedFormData(formData);
   };
 
   onNavChange = (nav) => {
@@ -396,12 +316,12 @@ export class EditorSection extends React.Component {
       configContent,
       uiContent,
       schemaContent,
-      modalsInfo,
+      editorTools,
     } = this.props;
 
+    console.log(configContent);
 
-    // console.log("We render this stuff", this.state.formData)
-    let FormWithNav = schemaContent ? this.FormWithNav : Form
+    let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
 
     // Update Select boxes upon a "partial refresh" (pressing Configure while in Configure mode)
     let selectedUISchemaAdj = this.state.selectedUISchema;
@@ -440,12 +360,12 @@ export class EditorSection extends React.Component {
     }
 
     // add the default 'base modals' to the modals list
-    let modalsInfoFull = modalsInfo.concat(
+    let editorToolsFull = editorTools.concat(
       {
         name: "partialconfig-modal",
         comment: "Partial config loader",
         class: "fa fa-plus",
-        modal: <PartialConfigLoader />,
+        modal: <PartialConfigLoader showAlert={this.props.showAlert} />,
       },
 
       {
@@ -478,9 +398,7 @@ export class EditorSection extends React.Component {
               "encryption-padding": this.state.activeSideBar != "none",
             })}
           >
-            <AlertContainer />
-
-            {modalsInfoFull.map((modal) => (
+            {editorToolsFull.map((modal) => (
               <div
                 style={{
                   display: modal.name == this.state.activeSideBar ? "" : "none",
@@ -507,9 +425,9 @@ export class EditorSection extends React.Component {
                     noHtml5Validate={true}
                     schema={schemaContent ? schemaContent : {}}
                     uiSchema={uiContent ? uiContent : {}}
-                    formData={this.state.formData} //{configContent ? configContent : {}}
+                    formData={configContent ? configContent : {}}
                     onSubmit={this.onSubmit}
-                    onChange={this.handleChange}//{({formData}) => this.setState({formData})}// {this.handleChange} // {(e)=>{this.setState({formData:e.formData})}}
+                    onChange={this.handleChange}
                     onError={this.handleError}
                     onNavChange={this.onNavChange.bind(this)}
                     ArrayFieldTemplate={EditorArrayFieldTemplate}
@@ -561,11 +479,7 @@ export class EditorSection extends React.Component {
 
                     <div
                       className={
-                        "config-bar" +
-                        (EDITOR.offline
-                          ? " fe-sidebar-shift-offline"
-                          : " fe-sidebar-shift")
-                      }
+                        "config-bar fe-sidebar-shift-offline"}
                     >
                       <div className="col-xs-1" style={{ minWidth: "120px" }}>
                         <button type="submit" className="btn btn-primary">
@@ -574,7 +488,7 @@ export class EditorSection extends React.Component {
                         </button>
                       </div>
                       <div className="col-xs-7" style={{ float: "left" }}>
-                        {modalsInfoFull.map((modal) => (
+                        {editorToolsFull.map((modal) => (
                           <EditorToolButton
                             onClick={() => this.subMenuBtnClick(modal.name)}
                             comment={modal.comment}
@@ -588,13 +502,10 @@ export class EditorSection extends React.Component {
               ) : (
                 <div
                   className={
-                    "config-bar" +
-                    (EDITOR.offline
-                      ? " fe-sidebar-shift-offline"
-                      : " fe-sidebar-shift")
+                    "config-bar fe-sidebar-shift-offline"
                   }
                 >
-                  {modalsInfoFull.map((modal) => (
+                  {editorToolsFull.map((modal) => (
                     <EditorToolButton
                       onClick={() => this.subMenuBtnClick(modal.name)}
                       comment={modal.comment}

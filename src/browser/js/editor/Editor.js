@@ -1,44 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {EncryptionModal, FilterModal, BitRateModal} from 'config-editor-tools'
+import {
+  EncryptionModal,
+  FilterModal,
+  BitRateModal,
+} from "config-editor-tools";
 
 import EditorSection from "./editorBase/EditorSection";
 
 import * as actionsAlert from "../alert/actions";
-
-import Form from "react-jsonschema-form";
-import applyNav from "react-jsonschema-form-pagination";
-import EditorNavs from "./editorBase/EditorNavs";
-
-
-
+import AlertContainer from "../alert/AlertContainer";
 
 class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-  // this.setUpdatedFormData = this.setUpdatedFormData.bind(this)
-  
-  // this.state = {
-  //   formDataTest: {}
-  // }  
-
-  this.FormWithNav = applyNav(Form, EditorNavs)
-
-
-  }
-
-  // setUpdatedFormData = (formData) => {
-  //   console.log("we update formData", formData)
-  //   this.setState({
-  //     formDataTest: formData,
-  //   });
-  // };
-
-
-
   render() {
-    let modalsInfo = [
+    let editorTools = [
       {
         name: "encryption-modal",
         comment: "Encryption tool",
@@ -59,12 +35,14 @@ class Editor extends React.Component {
       },
     ];
 
-    let Form = this.FormWithNav
     return (
-      <EditorSection modalsInfo={modalsInfo} showAlert={this.props.showAlert} 
-      Form={Form}
-      // setUpdatedFormData={this.setUpdatedFormData}
-       />
+      <React.Fragment>
+        <AlertContainer />
+        <EditorSection
+          editorTools={editorTools}
+          showAlert={this.props.showAlert}
+        />
+      </React.Fragment>
     );
   }
 }

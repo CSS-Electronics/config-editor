@@ -1,5 +1,4 @@
 import saveAs from "file-saver";
-import * as alertActions from "../../alert/actions";
 
 export const SET_SCHEMA_LIST = "editor/SET_SCHEMA_LIST";
 export const SET_CONFIG_LIST = "editor/SET_CONFIG_LIST";
@@ -156,7 +155,7 @@ export const fetchUISchemaContent = (fileName) => {
   };
 };
 
-export const handleUploadedUISchma = (file) => {
+export const handleUploadedUISchema = (file) => {
   return function (dispatch) {
     if (isValidUISchema(file.name)) {
       let fileReader = new FileReader();
@@ -170,24 +169,12 @@ export const handleUploadedUISchma = (file) => {
           dispatch(resetLocalUISchemaList());
           dispatch(setUISchemaFile([`${fileNameShort} (local)`]));
         } catch (error) {
-          dispatch(
-            alertActions.set({
-              type: "danger",
-              message: `Warning: UISchema ${file.name} is invalid and was not loaded`,
-              autoClear: true,
-            })
-          );
+          window.alert(`Warning: UISchema ${file.name} is invalid and was not loaded`)
         }
       };
       fileReader.readAsText(file);
     } else {
-      dispatch(
-        alertActions.set({
-          type: "danger",
-          message: `${file.name} is an invalid file/filename`,
-          autoClear: true,
-        })
-      );
+      window.alert(`${file.name} is an invalid file/filename`)
     }
   };
 };
@@ -260,27 +247,45 @@ export const handleUploadedSchema = (file) => {
           dispatch(resetLocalSchemaList());
           dispatch(setSchemaFile([`${fileNameShort} (local)`]));
         } catch (error) {
-          dispatch(
-            alertActions.set({
-              type: "danger",
-              message: `Warning: Schema ${file.name} is invalid and was not loaded`,
-              autoClear: true,
-            })
-          );
+          window.alert(`Warning: Schema ${file.name} is invalid and was not loaded`)
         }
       };
       fileReader.readAsText(file);
     } else {
-      dispatch(
-        alertActions.set({
-          type: "danger",
-          message: `${file.name} is an invalid file/filename`,
-          autoClear: true,
-        })
-      );
+      window.alert(`${file.name} is an invalid file/filename`)
     }
   };
 };
+
+
+
+export const fetchSchemaContent = fileName => {
+  return function(dispatch, getState) {
+    const uploadedTest = getState().editor.editorSchemaFiles.filter(file =>
+      file.name.includes("local")
+    )[0];
+
+    if (uploadedTest != undefined) {
+      dispatch(resetUploadedSchemaList());
+    }
+    switch (true) {
+      case fileName == "None" || fileName == undefined:
+        dispatch(setSchemaContent(null));
+        break;
+      case fileName.match(regexSchemaPublic) != null:
+        const schemaPublic = require(`../../../schema/${
+          fileName.split(" | ")[1]
+        }/${fileName.split(" ")[0]}`);
+        dispatch(setSchemaContent(schemaPublic));
+        dispatch(setUpdatedFormData(getState().editor.configContent));
+        break;
+      default:
+        dispatch(setSchemaContent(null));
+    }
+  };
+};
+
+
 
 export const setSchemaFile = (schemaFiles) => ({
   type: SET_SCHEMA_LIST,
@@ -340,8 +345,9 @@ export const fetchConfigContent = (fileName, type) => {
 };
 
 // handle when the user uploads a configuration file
-export const handleUploadedConfig = (file) => {
+export function handleUploadedConfig (file) {
   return function (dispatch, getState) {
+
     // load the matching schema files if a schema file is not already uploaded
     const localLoaded =
       getState().editor.editorSchemaFiles[0] &&
@@ -366,24 +372,14 @@ export const handleUploadedConfig = (file) => {
           dispatch(setUpdatedFormData(jsonContent));
           dispatch(setConfigContentPreChange(content));
         } catch (error) {
-          dispatch(
-            alertActions.set({
-              type: "danger",
-              message: `Warning: Config ${file.name} is invalid and was not loaded`,
-              autoClear: true,
-            })
-          );
+
+          window.alert(`Warning: Config ${file.name} is invalid and was not loaded`)
+
         }
       };
       fileReader.readAsText(file);
     } else {
-      dispatch(
-        alertActions.set({
-          type: "danger",
-          message: `${file.name} is an invalid file/filename`,
-          autoClear: true,
-        })
-      );
+      window.alert(`${file.name} is an invalid file/filename`)
     }
   };
 };

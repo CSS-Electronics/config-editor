@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import Files from "react-files";
-import * as actionsAlert from "../../alert/actions";
 import * as actionsEditor from "../editorBase/actions";
 import Form from "react-jsonschema-form";
 
@@ -195,8 +194,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showAlert: (type, message) =>
-      dispatch(actionsAlert.set({ type: type, message: message })),
     setConfigContent: content =>
       dispatch(actionsEditor.setConfigContent(content)),
     setUpdatedFormData: (formData) =>
