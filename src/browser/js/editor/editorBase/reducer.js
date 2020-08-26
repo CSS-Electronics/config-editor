@@ -9,7 +9,8 @@ export default (
     configContentPreChange: "",
     configContentLocal: {},
     formData: {},
-    crc32EditorLive: ""
+    crc32EditorLive: "",
+    configContent: {}
   },
   action
 ) => {

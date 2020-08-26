@@ -19,11 +19,11 @@ import AlertContainer from "../../alert/AlertContainer";
 import * as actionsEditor from "./actions";
 import * as alertActions from "../../alert/actions";
 
+import { crcBrowserSupport } from "./utils";
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
 let isDownloadConfig = false;
 let activatedTab;
-
 
 export class EditorSection extends React.Component {
   constructor(props) {
@@ -38,6 +38,12 @@ export class EditorSection extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.escFunction = this.escFunction.bind(this);
     this.subMenuBtnClick = this.subMenuBtnClick.bind(this);
+
+    this.setConfigContent = this.setConfigContent.bind(this)
+    this.FormWithNav = applyNav(Form, EditorNavs)
+
+    this.calcCrc32EditorLive = this.calcCrc32EditorLive.bind(this);
+    // this.setUpdatedFormData = this.setUpdatedFormData.bind(this);
 
     this.state = {
       uischema: "",
@@ -54,17 +60,54 @@ export class EditorSection extends React.Component {
       isDownloadConfig: false,
       isCompareChanges: false,
       activeSideBar: "schema-modal",
+
+      formDataContent: {},
+      editorSchemaFiles: [],
+      editorConfigFiles: [],
+      editorUISchemaFiles: [],
+      configContentPreChange: "",
+      configContentLocal: {},
+      crc32EditorLive: "",
+
+      configContent: {}
     };
 
     this.input = "";
   }
+
+  calcCrc32EditorLive = (formData) => {
+    let formDataInput = formData;
+    let crc32EditorLive = "";
+
+    if (crcBrowserSupport == 1 && formDataInput) {
+      const { crc32 } = require("crc");
+      crc32EditorLive = crc32(JSON.stringify(formDataInput, null, 2))
+        .toString(16)
+        .toUpperCase()
+        .padStart(8, "0");
+    } else {
+      crc32EditorLive = `N/A`;
+    }
+
+    this.setState({
+      crc32EditorLive: crc32EditorLive,
+    });
+  };
+
+  // setUpdatedFormData = (formData) => {
+  //   console.log("we update formData", this.state.formDataContent)
+  //   this.setState({
+  //     formDataContent: formData,
+  //   });
+  //   // this.calcCrc32EditorLive(formData);
+  // };
 
   escFunction(event) {
     if (event.keyCode === 27) {
       this.closeChangesModal();
     }
   }
-  
+
   subMenuBtnClick(name) {
     let sideBar = this.state.activeSideBar == name ? "none" : name;
 
@@ -76,6 +119,16 @@ export class EditorSection extends React.Component {
         this.props.setConfigContentPreSubmit();
       }
     );
+  }
+
+  setConfigContent = (formData) => {
+    console.log("do we even get here?")
+    this.setState(
+      {
+        configContent: formData,
+      }
+    );
+      console.log("TEST",this.state.configContent)
   }
 
   handleUiSchemaChange(selection) {
@@ -150,11 +203,26 @@ export class EditorSection extends React.Component {
     document.addEventListener("keydown", this.escFunction, false);
   }
 
+
   componentWillUnMount() {
     document.removeEventListener("keydown", this.escFunction, false);
   }
 
+
+  // 1 Test in the simplest case via create-creat-app
+  // 2) Try updating to latest versions
+
   componentWillReceiveProps(nextProps) {
+
+    console.log("this.props",this.props.configContent)
+    console.log("nextprops",nextProps.configContent)
+    if(this.props.configContent != nextProps.configContent){
+      console.log("NO MATCH")
+      this.setState({
+        formData: nextProps.configContent
+      })
+    }
+
     // ensure that if there's a new schema file list, the selection returns to the default value
     if (this.props.editorSchemaFiles != nextProps.editorSchemaFiles) {
       this.setState({
@@ -222,6 +290,7 @@ export class EditorSection extends React.Component {
   }
 
   onSubmit({ formData }) {
+    console.log("we submit?")
     if (
       this.props.schemaContent == undefined ||
       this.props.schemaContent == null
@@ -311,7 +380,8 @@ export class EditorSection extends React.Component {
   }
 
   handleChange = ({ formData }) => {
-    this.props.setUpdatedFormData(formData);
+    // this.props.setUpdatedFormData(formData);
+    this.setState({formData});
   };
 
   onNavChange = (nav) => {
@@ -329,7 +399,9 @@ export class EditorSection extends React.Component {
       modalsInfo,
     } = this.props;
 
-    let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
+
+    // console.log("We render this stuff", this.state.formData)
+    let FormWithNav = schemaContent ? this.FormWithNav : Form
 
     // Update Select boxes upon a "partial refresh" (pressing Configure while in Configure mode)
     let selectedUISchemaAdj = this.state.selectedUISchema;
@@ -435,9 +507,9 @@ export class EditorSection extends React.Component {
                     noHtml5Validate={true}
                     schema={schemaContent ? schemaContent : {}}
                     uiSchema={uiContent ? uiContent : {}}
-                    formData={configContent ? configContent : {}}
+                    formData={this.state.formData} //{configContent ? configContent : {}}
                     onSubmit={this.onSubmit}
-                    onChange={this.handleChange}
+                    onChange={this.handleChange}//{({formData}) => this.setState({formData})}// {this.handleChange} // {(e)=>{this.setState({formData:e.formData})}}
                     onError={this.handleError}
                     onNavChange={this.onNavChange.bind(this)}
                     ArrayFieldTemplate={EditorArrayFieldTemplate}
@@ -568,7 +640,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionsEditor.setUpdatedFormData(formData)),
     setConfigContentPreSubmit: () =>
       dispatch(actionsEditor.setConfigContentPreSubmit()),
-    publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles())
+    publicUiSchemaFiles: () => dispatch(actionsEditor.publicUiSchemaFiles()),
   };
 };
 

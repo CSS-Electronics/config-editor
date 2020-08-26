@@ -7,7 +7,36 @@ import EditorSection from "./editorBase/EditorSection";
 
 import * as actionsAlert from "../alert/actions";
 
+import Form from "react-jsonschema-form";
+import applyNav from "react-jsonschema-form-pagination";
+import EditorNavs from "./editorBase/EditorNavs";
+
+
+
+
 class Editor extends React.Component {
+  constructor(props) {
+    super(props);
+  // this.setUpdatedFormData = this.setUpdatedFormData.bind(this)
+  
+  // this.state = {
+  //   formDataTest: {}
+  // }  
+
+  this.FormWithNav = applyNav(Form, EditorNavs)
+
+
+  }
+
+  // setUpdatedFormData = (formData) => {
+  //   console.log("we update formData", formData)
+  //   this.setState({
+  //     formDataTest: formData,
+  //   });
+  // };
+
+
+
   render() {
     let modalsInfo = [
       {
@@ -30,8 +59,12 @@ class Editor extends React.Component {
       },
     ];
 
+    let Form = this.FormWithNav
     return (
-      <EditorSection modalsInfo={modalsInfo} showAlert={this.props.showAlert} />
+      <EditorSection modalsInfo={modalsInfo} showAlert={this.props.showAlert} 
+      Form={Form}
+      // setUpdatedFormData={this.setUpdatedFormData}
+       />
     );
   }
 }
