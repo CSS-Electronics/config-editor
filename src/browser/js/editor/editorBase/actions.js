@@ -34,7 +34,7 @@ import {
   uiSchemaAry,
   schemaAry,
   crcBrowserSupport,
-  getFileType
+  getFileType,
 } from "./utils";
 
 // -------------------------------------------------------
@@ -78,15 +78,15 @@ export const publicUiSchemaFiles = () => {
   };
 };
 
+// fetch file content from embedded files
 export const fetchFileContent = (fileName, type) => {
-  return function (dispatch) {
-    // Persist the editor formdata before proceeding
-    dispatch(setConfigContentPreSubmit());
+  return function (dispatch, getState) {
 
     // Remove existing "uploaded" files from dropdown and set Schema to loaded file from schema/ folder
     // Note that for cases where files are uploaded, the below is handled as part of the upload function
     switch (true) {
       case type == "uischema":
+        dispatch(setConfigContentPreSubmit());
         dispatch(resetLocalUISchemaList());
 
         if (fileName.match(regexUISchemaPublic) != null) {
@@ -114,18 +114,25 @@ export const fetchFileContent = (fileName, type) => {
         }
 
         break;
+      case type == "config-review":
+        dispatch(
+          setConfigContentPreChange(getState().editor.configContentLocal)
+        );
+        if(fileName == "None"){
+          dispatch(setConfigContentPreChange(""));
+        }
+        break;
     }
   };
 };
 
+// handle files uploaded via the Schema Loader dropdowns
 export const handleUploadedFile = (file, dropdown) => {
-
-  let type = getFileType(dropdown)
+  let type = getFileType(dropdown);
 
   return function (dispatch, getState) {
     let fileReader = new FileReader();
     fileReader.onloadend = (e) => {
-
       const content = fileReader.result;
       let contentJSON = null;
       let fileNameDisplay = `${file.name} (local)`;
@@ -177,7 +184,6 @@ export const handleUploadedFile = (file, dropdown) => {
   };
 };
 
-
 // ** can be generalized if it works like state
 export const setUISchemaFile = (UISchemaFiles) => ({
   type: SET_UISCHEMA_LIST,
@@ -218,18 +224,13 @@ export const publicSchemaFiles = (selectedConfig) => {
         schemaAryFiltered = schemaAry.filter((e) => e.includes("CANedge1"));
       }
 
-      let defaultSchema = schemaAryFiltered[0];
-
-      if (defaultSchema) {
-        const schemaPublic = loadFile(defaultSchema);
-
+      if (schemaAryFiltered[0]) {
         dispatch(setSchemaFile(schemaAryFiltered));
-        dispatch(setSchemaContent(schemaPublic));
+        dispatch(setSchemaContent(loadFile(schemaAryFiltered[0])));
       }
     }
   };
 };
-
 
 export const setSchemaFile = (schemaFiles) => ({
   type: SET_SCHEMA_LIST,
@@ -264,29 +265,6 @@ export const resetUploadedSchemaList = () => ({
 
 // -------------------------------------------------------
 // CONFIGURATION FILE:
-export const fetchConfigContent = (fileName, type) => {
-  return function (dispatch, getState) {
-    if (fileName && fileName.includes("(local)")) {
-      if (type == "review") {
-        dispatch(
-          setConfigContentPreChange(getState().editor.configContentLocal)
-        );
-      }
-      return;
-    }
-    if (type == "editor") {
-      dispatch(resetLocalConfigList());
-    }
-
-    if (fileName == "None" && type == "editor") {
-      dispatch(setConfigContent(null));
-      dispatch(setUpdatedFormData(null));
-      dispatch(setConfigContentPreChange(""));
-    } else if (fileName == "None" && type == "review") {
-      dispatch(setConfigContentPreChange(""));
-    }
-  };
-};
 
 export const setConfigFile = (configFiles) => ({
   type: SET_CONFIG_LIST,

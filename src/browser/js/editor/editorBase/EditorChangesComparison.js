@@ -29,6 +29,7 @@ class EditorChangesComparison extends React.Component {
   constructor(props) {
     super(props);
     this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this)
     this.state = {
       hideWhiteSpace: true,
     };
@@ -40,11 +41,14 @@ class EditorChangesComparison extends React.Component {
     });
   };
 
+  handleSelectChange = selectedValue => {
+    this.props.handleDropdownChange(selectedValue.value, "Previous Configuration File");
+  };
+  
   render() {
     const {
       options,
       selected,
-      handleReviewConfigChange,
       past,
       current,
       closeChangesModal,
@@ -81,7 +85,7 @@ class EditorChangesComparison extends React.Component {
                 <Select
                   value={selected}
                   options={selectOptions(options)}
-                  onChange={handleReviewConfigChange}
+                  onChange={this.handleSelectChange}
                   isDisabled={
                     selectOptions(options).length == 1 &&
                     selectOptions(options)[0].value == "None"

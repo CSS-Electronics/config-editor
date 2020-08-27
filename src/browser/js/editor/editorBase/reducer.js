@@ -26,6 +26,7 @@ export default (
         editorUISchemaFiles: []
       };
     case actionsEditor.SET_CONFIG_DATA:
+      console.log("config",action.configContent)
       return {
         ...state,
         configContent: action.configContent

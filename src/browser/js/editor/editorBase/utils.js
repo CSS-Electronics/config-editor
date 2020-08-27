@@ -66,6 +66,9 @@ export const getFileType = (dropdown) => {
     case dropdown == "Configuration File":
       type = "config"
       break;
+    case dropdown == "Previous Configuration File":
+      type = "config-review"
+      break;
     default:
       type = "invalid"
   }

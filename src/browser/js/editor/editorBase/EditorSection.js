@@ -81,20 +81,10 @@ export class EditorSection extends React.Component {
       {
         [fileType]: selection,
         ["selected" + fileType]: selection,
+        [fileType + "Review"]: selection
       },
       () => {
         this.props.fetchFileContent(selection, fileType);
-      }
-    );
-  }
-
-  handleReviewConfigChange(selection) {
-    this.setState(
-      {
-        configReview: selection,
-      },
-      () => {
-        this.props.fetchConfigContent(selection.value, "review");
       }
     );
   }
@@ -168,9 +158,6 @@ export class EditorSection extends React.Component {
       this.setState(
         {
           configReview: { value: "None", label: "None" },
-        },
-        () => {
-          // this.props.fetchConfigContent(configName, "review");
         }
       );
     }
@@ -189,7 +176,7 @@ export class EditorSection extends React.Component {
           configReview: { value: configName, label: configName },
         },
         () => {
-          this.props.fetchConfigContent(configName, "review");
+          this.props.fetchFileContent(configName, "config-review");
         }
       );
     }
@@ -425,9 +412,7 @@ export class EditorSection extends React.Component {
                           revisedConfigFile={this.state.revisedConfigFile}
                           options={editorConfigFiles}
                           selected={this.state.configReview}
-                          handleReviewConfigChange={this.handleReviewConfigChange.bind(
-                            this
-                          )}
+                          handleDropdownChange={this.handleDropdownChange}
                           closeChangesModal={this.closeChangesModal}
                         />
                         <div className="modal-custom-footer">
@@ -513,8 +498,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchFileContent: (fileName, fileType) =>
     dispatch(actionsEditor.fetchFileContent(fileName, fileType)),
-    fetchConfigContent: (filename, type) =>
-      dispatch(actionsEditor.fetchConfigContent(filename, type)),
     setConfigContent: (content) =>
       dispatch(actionsEditor.setConfigContent(content)),
     saveUpdatedConfiguration: (filename, content) =>
