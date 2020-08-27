@@ -28,9 +28,6 @@ export class EditorSection extends React.Component {
   constructor(props) {
     super(props);
     this.editorForm = React.createRef();
-    this.handleUiSchemaChange = this.handleUiSchemaChange.bind(this);
-    this.handleSchemaChange = this.handleSchemaChange.bind(this);
-    this.handleConfigChange = this.handleConfigChange.bind(this);
     this.handleCompareChanges = this.handleCompareChanges.bind(this);
     this.closeChangesModal = this.closeChangesModal.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -87,43 +84,6 @@ export class EditorSection extends React.Component {
       },
       () => {
         this.props.fetchFileContent(selection, fileType);
-      }
-    );
-  }
-
-  handleUiSchemaChange(selection) {
-    this.setState(
-      {
-        uischema: selection,
-        selecteduischema: selection,
-      },
-      () => {
-        this.props.fetchUISchemaContent(this.state.uischema);
-      }
-    );
-  }
-
-  handleSchemaChange(selection) {
-
-     this.setState(
-      {
-        schema: selection,
-        selectedschema: selection,
-      },
-      () => {
-        this.props.fetchSchemaContent(this.state.schema);
-      }
-    );
-  }
-
-  handleConfigChange(selection) {
-    this.setState(
-      {
-        config: selection,
-        selectedconfig: selection,
-      },
-      () => {
-        this.props.fetchConfigContent(this.state.config, "editor");
       }
     );
   }
@@ -555,12 +515,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(actionsEditor.fetchFileContent(fileName, fileType)),
     fetchConfigContent: (filename, type) =>
       dispatch(actionsEditor.fetchConfigContent(filename, type)),
-    fetchSchemaContent: (schema) =>
-      dispatch(actionsEditor.fetchSchemaContent(schema)),
     setConfigContent: (content) =>
       dispatch(actionsEditor.setConfigContent(content)),
-    fetchUISchemaContent: (uiSchema) =>
-      dispatch(actionsEditor.fetchUISchemaContent(uiSchema)),
     saveUpdatedConfiguration: (filename, content) =>
       dispatch(actionsEditor.saveUpdatedConfiguration(filename, content)),
     setUpdatedFormData: (formData) =>

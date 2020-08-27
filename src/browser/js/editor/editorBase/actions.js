@@ -22,39 +22,17 @@ export const SET_UISCHEMA_SOURCE = "editor/SET_UISCHEMA_SOURCE";
 export const SET_CONFIG_DATA_LOCAL = "SET_CONFIG_DATA_LOCAL";
 export const SET_CRC32_EDITOR_LIVE = "SET_CRC32_EDITOR_LIVE";
 
-import {isValidUISchema, isValidSchema, isValidConfig} from "./utils"
-
-// Toggle demo mode on/off
-const demoMode = false;
-
-// Note: These need to be updated with future firmware revisions
-const uiSchemaAry = [
-  "uischema-01.02.json | Simple",
-  "uischema-01.02.json | Advanced",
-];
-
-const schemaAry = [
-  "schema-01.02.json | CANedge2",
-  "schema-01.02.json | CANedge1",
-  "schema-01.02.json | CANedge2",
-  "schema-01.02.json | CANedge1",
-  "schema-00.07.json | CANedge2",
-  "schema-00.07.json | CANedge1",
-];
-
-
-
-const regexUISchemaPublic = new RegExp(
-  /^uischema-\d{2}\.\d{2}\.json \| (Advanced|Simple)$/,
-  "g"
-);
-
-const regexSchemaPublic = new RegExp(
-  /^schema-\d{2}\.\d{2}\.json \| CANedge(1|2)$/,
-  "g"
-);
-
-
+import {
+  regexUISchemaPublic,
+  regexSchemaPublic,
+  isValidUISchema,
+  isValidSchema,
+  isValidConfig,
+  loadFile,
+  demoMode,
+  uiSchemaAry,
+  schemaAry,
+} from "./utils";
 
 // -------------------------------------------------------
 // CRC32: Calculate crc32 of Configuration File
@@ -93,8 +71,6 @@ export const setCrc32EditorLive = (crc32EditorLive) => ({
   crc32EditorLive,
 });
 
-
-
 // -------------------------------------------------------
 // UISCHEMA: load the Simple/Advanced default UIschema in the online & offline editor
 export const publicUiSchemaFiles = () => {
@@ -117,38 +93,12 @@ export const loadUISchemaSimpleAdvanced = () => {
 
     const defaultUiSchemaContent = require(`../../../schema/${
       defaultUiSchema.split(" | ")[1]
-    }/${defaultUiSchema.split(" ")[0]}`)
+    }/${defaultUiSchema.split(" ")[0]}`);
 
     dispatch(setUISchemaFile(uiSchemaAry));
     dispatch(setUISchemaContent(defaultUiSchemaContent));
   };
 };
-
-export const fetchUISchemaContent = (fileName) => {
-  return function (dispatch) {
-    dispatch(setConfigContentPreSubmit());
-    dispatch(resetLocalUISchemaList());
-    switch (true) {
-      case fileName == "None" || fileName == undefined:
-        dispatch(setUISchemaContent(null));
-        break;
-      case fileName.match(regexUISchemaPublic) != null:
-        const uiSchemaPublic = require(`../../../schema/${
-          fileName.split(" | ")[1]
-        }/${fileName.split(" ")[0]}`);
-        dispatch(setUISchemaContent(uiSchemaPublic));
-        break;
-    }
-  };
-};
-
-export const loadFile = (fileName) => {
-  const schema = require(`../../../schema/${
-    fileName.split(" | ")[1]
-  }/${fileName.split(" ")[0]}`);
-
-  return schema;
-}
 
 export const fetchFileContent = (fileName, type) => {
   return function (dispatch) {
@@ -159,20 +109,20 @@ export const fetchFileContent = (fileName, type) => {
     // Note that for cases where files are uploaded, the below is handled as part of the upload function
     switch (true) {
       case type == "uischema":
-        dispatch(resetLocalUISchemaList())
+        dispatch(resetLocalUISchemaList());
 
-        if(fileName.match(regexUISchemaPublic) != null){
-          dispatch(setUISchemaContent(loadFile(fileName)))
-        }else{
-          dispatch(setUISchemaContent(null))
+        if (fileName.match(regexUISchemaPublic) != null) {
+          dispatch(setUISchemaContent(loadFile(fileName)));
+        } else {
+          dispatch(setUISchemaContent(null));
         }
 
         break;
       case type == "schema":
-        if(fileName.match(regexSchemaPublic) != null){
-          dispatch(setSchemaContent(loadFile(fileName)))
-        }else{
-          dispatch(setSchemaContent(null))
+        if (fileName.match(regexSchemaPublic) != null) {
+          dispatch(setSchemaContent(loadFile(fileName)));
+        } else {
+          dispatch(setSchemaContent(null));
         }
 
         break;
@@ -183,14 +133,12 @@ export const fetchFileContent = (fileName, type) => {
           dispatch(setConfigContent(null));
           dispatch(setUpdatedFormData(null));
           dispatch(setConfigContentPreChange(""));
-        } 
+        }
 
         break;
     }
-
   };
 };
-
 
 export const handleUploadedUISchema = (file) => {
   return function (dispatch) {
@@ -206,12 +154,14 @@ export const handleUploadedUISchema = (file) => {
           dispatch(resetLocalUISchemaList());
           dispatch(setUISchemaFile([`${fileNameShort} (local)`]));
         } catch (error) {
-          window.alert(`Warning: UISchema ${file.name} is invalid and was not loaded`)
+          window.alert(
+            `Warning: UISchema ${file.name} is invalid and was not loaded`
+          );
         }
       };
       fileReader.readAsText(file);
     } else {
-      window.alert(`${file.name} is an invalid file/filename`)
+      window.alert(`${file.name} is an invalid file/filename`);
     }
   };
 };
@@ -284,45 +234,17 @@ export const handleUploadedSchema = (file) => {
           dispatch(resetLocalSchemaList());
           dispatch(setSchemaFile([`${fileNameShort} (local)`]));
         } catch (error) {
-          window.alert(`Warning: Schema ${file.name} is invalid and was not loaded`)
+          window.alert(
+            `Warning: Schema ${file.name} is invalid and was not loaded`
+          );
         }
       };
       fileReader.readAsText(file);
     } else {
-      window.alert(`${file.name} is an invalid file/filename`)
+      window.alert(`${file.name} is an invalid file/filename`);
     }
   };
 };
-
-
-
-export const fetchSchemaContent = fileName => {
-  return function(dispatch, getState) {
-    const uploadedTest = getState().editor.editorSchemaFiles.filter(file =>
-      file.name.includes("local")
-    )[0];
-
-    if (uploadedTest != undefined) {
-      dispatch(resetUploadedSchemaList());
-    }
-    switch (true) {
-      case fileName == "None" || fileName == undefined:
-        dispatch(setSchemaContent(null));
-        break;
-      case fileName.match(regexSchemaPublic) != null:
-        const schemaPublic = require(`../../../schema/${
-          fileName.split(" | ")[1]
-        }/${fileName.split(" ")[0]}`);
-        dispatch(setSchemaContent(schemaPublic));
-        dispatch(setUpdatedFormData(getState().editor.configContent));
-        break;
-      default:
-        dispatch(setSchemaContent(null));
-    }
-  };
-};
-
-
 
 export const setSchemaFile = (schemaFiles) => ({
   type: SET_SCHEMA_LIST,
@@ -382,9 +304,8 @@ export const fetchConfigContent = (fileName, type) => {
 };
 
 // handle when the user uploads a configuration file
-export function handleUploadedConfig (file) {
+export function handleUploadedConfig(file) {
   return function (dispatch, getState) {
-
     // load the matching schema files if a schema file is not already uploaded
     const localLoaded =
       getState().editor.editorSchemaFiles[0] &&
@@ -409,17 +330,17 @@ export function handleUploadedConfig (file) {
           dispatch(setUpdatedFormData(jsonContent));
           dispatch(setConfigContentPreChange(content));
         } catch (error) {
-
-          window.alert(`Warning: Config ${file.name} is invalid and was not loaded`)
-
+          window.alert(
+            `Warning: Config ${file.name} is invalid and was not loaded`
+          );
         }
       };
       fileReader.readAsText(file);
     } else {
-      window.alert(`${file.name} is an invalid file/filename`)
+      window.alert(`${file.name} is an invalid file/filename`);
     }
   };
-};
+}
 
 export const setConfigFile = (configFiles) => ({
   type: SET_CONFIG_LIST,
