@@ -30,15 +30,16 @@ import {
   isValidConfig,
   loadFile,
   demoMode,
+  demoConfig,
   uiSchemaAry,
   schemaAry,
-  crcBrowserSupport
+  crcBrowserSupport,
+  getFileType
 } from "./utils";
 
 // -------------------------------------------------------
 // CRC32: Calculate checksums for comparison review of config files
 export const calcCrc32EditorLive = () => {
-  console.log("crcBrowserSupport", crcBrowserSupport)
   return function (dispatch, getState) {
     let formData = getState().editor.formData;
 
@@ -66,28 +67,14 @@ export const setCrc32EditorLive = (crc32EditorLive) => ({
 // UISCHEMA: load the Simple/Advanced default UIschema in the online & offline editor
 export const publicUiSchemaFiles = () => {
   return function (dispatch) {
-    dispatch(loadUISchemaSimpleAdvanced());
+    dispatch(resetUISchemaList());
+    dispatch(setUISchemaFile(uiSchemaAry));
+    dispatch(setUISchemaContent(loadFile(uiSchemaAry[0])));
 
     // If demoMode, load the Rule Schema by default for use in the online simple editor
     if (demoMode) {
-      dispatch(publicSchemaFiles("config-01.02.json"));
+      dispatch(publicSchemaFiles(demoConfig));
     }
-  };
-};
-
-// load both a simple/advanced UIschema
-export const loadUISchemaSimpleAdvanced = () => {
-  return function (dispatch) {
-    dispatch(resetUISchemaList());
-
-    const defaultUiSchema = uiSchemaAry[0];
-
-    const defaultUiSchemaContent = require(`../../../schema/${
-      defaultUiSchema.split(" | ")[1]
-    }/${defaultUiSchema.split(" ")[0]}`);
-
-    dispatch(setUISchemaFile(uiSchemaAry));
-    dispatch(setUISchemaContent(defaultUiSchemaContent));
   };
 };
 
@@ -131,32 +118,67 @@ export const fetchFileContent = (fileName, type) => {
   };
 };
 
-export const handleUploadedUISchema = (file) => {
-  return function (dispatch) {
-    if (isValidUISchema(file.name)) {
-      let fileReader = new FileReader();
-      fileReader.onloadend = (e) => {
-        const content = fileReader.result;
-        const fileNameShort = file.name.split("_")[1]
-          ? file.name.split("_")[1]
-          : file.name.split("_")[0];
-        try {
-          dispatch(setUISchemaContent(JSON.parse(content)));
-          dispatch(resetLocalUISchemaList());
-          dispatch(setUISchemaFile([`${fileNameShort} (local)`]));
-        } catch (error) {
-          window.alert(
-            `Warning: UISchema ${file.name} is invalid and was not loaded`
-          );
+export const handleUploadedFile = (file, dropdown) => {
+
+  let type = getFileType(dropdown)
+
+  return function (dispatch, getState) {
+    let fileReader = new FileReader();
+    fileReader.onloadend = (e) => {
+
+      const content = fileReader.result;
+      let contentJSON = null;
+      let fileNameDisplay = `${file.name} (local)`;
+      try {
+        contentJSON = JSON.parse(content);
+      } catch (error) {
+        window.alert(`Warning: ${file.name} is invalid and was not loaded`);
+      }
+
+      if (contentJSON != null) {
+        switch (true) {
+          case type == "uischema" && isValidUISchema(file.name):
+            dispatch(setUISchemaContent(contentJSON));
+            dispatch(resetLocalUISchemaList());
+            dispatch(setUISchemaFile([fileNameDisplay]));
+
+            break;
+          case type == "schema" && isValidSchema(file.name):
+            dispatch(setSchemaContent(contentJSON));
+            dispatch(resetLocalSchemaList());
+            dispatch(setSchemaFile([fileNameDisplay]));
+            break;
+          case type == "config" && isValidConfig(file.name):
+            // load the matching schema files if a schema file is not already uploaded
+            const localLoaded =
+              getState().editor.editorSchemaFiles[0] &&
+              getState().editor.editorSchemaFiles[0].name.includes("local");
+
+            if (file && file.name && file.name.length && !localLoaded) {
+              dispatch(publicSchemaFiles(file.name));
+            }
+
+            // TBD: Look intro trimming below
+            dispatch(setConfigContentLocal(content));
+            dispatch(setConfigContent(contentJSON));
+            dispatch(resetLocalConfigList());
+            dispatch(setConfigFile([fileNameDisplay]));
+            dispatch(setUpdatedFormData(contentJSON));
+            dispatch(setConfigContentPreChange(content));
+
+            break;
+          default:
+            window.alert(`${file.name} is an invalid file/filename`);
+            break;
         }
-      };
-      fileReader.readAsText(file);
-    } else {
-      window.alert(`${file.name} is an invalid file/filename`);
-    }
+      }
+    };
+    fileReader.readAsText(file);
   };
 };
 
+
+// ** can be generalized if it works like state
 export const setUISchemaFile = (UISchemaFiles) => ({
   type: SET_UISCHEMA_LIST,
   UISchemaFiles: UISchemaFiles.map((file, index) => ({
@@ -199,9 +221,7 @@ export const publicSchemaFiles = (selectedConfig) => {
       let defaultSchema = schemaAryFiltered[0];
 
       if (defaultSchema) {
-        const schemaPublic = require(`../../../schema/${
-          defaultSchema.split(" | ")[1]
-        }/${defaultSchema.split(" ")[0]}`);
+        const schemaPublic = loadFile(defaultSchema);
 
         dispatch(setSchemaFile(schemaAryFiltered));
         dispatch(setSchemaContent(schemaPublic));
@@ -210,32 +230,6 @@ export const publicSchemaFiles = (selectedConfig) => {
   };
 };
 
-// This is run when uploading a schema file
-export const handleUploadedSchema = (file) => {
-  return function (dispatch) {
-    if (isValidSchema(file.name)) {
-      let fileReader = new FileReader();
-      fileReader.onloadend = (e) => {
-        const content = fileReader.result;
-        const fileNameShort = file.name.split("_")[1]
-          ? file.name.split("_")[1]
-          : file.name.split("_")[0];
-        try {
-          dispatch(setSchemaContent(JSON.parse(content)));
-          dispatch(resetLocalSchemaList());
-          dispatch(setSchemaFile([`${fileNameShort} (local)`]));
-        } catch (error) {
-          window.alert(
-            `Warning: Schema ${file.name} is invalid and was not loaded`
-          );
-        }
-      };
-      fileReader.readAsText(file);
-    } else {
-      window.alert(`${file.name} is an invalid file/filename`);
-    }
-  };
-};
 
 export const setSchemaFile = (schemaFiles) => ({
   type: SET_SCHEMA_LIST,
@@ -293,45 +287,6 @@ export const fetchConfigContent = (fileName, type) => {
     }
   };
 };
-
-// handle when the user uploads a configuration file
-export function handleUploadedConfig(file) {
-  return function (dispatch, getState) {
-    // load the matching schema files if a schema file is not already uploaded
-    const localLoaded =
-      getState().editor.editorSchemaFiles[0] &&
-      getState().editor.editorSchemaFiles[0].name.includes("local");
-
-    if (file && file.name && file.name.length && !localLoaded) {
-      dispatch(publicSchemaFiles(file.name));
-    }
-    if (isValidConfig(file.name)) {
-      let fileReader = new FileReader();
-      fileReader.onloadend = (e) => {
-        const content = fileReader.result;
-        const fileNameShort = file.name.split("_")[1]
-          ? file.name.split("_")[1]
-          : file.name.split("_")[0];
-        try {
-          const jsonContent = JSON.parse(content);
-          dispatch(setConfigContentLocal(content));
-          dispatch(setConfigContent(jsonContent));
-          dispatch(resetLocalConfigList());
-          dispatch(setConfigFile([`${fileNameShort} (local)`]));
-          dispatch(setUpdatedFormData(jsonContent));
-          dispatch(setConfigContentPreChange(content));
-        } catch (error) {
-          window.alert(
-            `Warning: Config ${file.name} is invalid and was not loaded`
-          );
-        }
-      };
-      fileReader.readAsText(file);
-    } else {
-      window.alert(`${file.name} is an invalid file/filename`);
-    }
-  };
-}
 
 export const setConfigFile = (configFiles) => ({
   type: SET_CONFIG_LIST,

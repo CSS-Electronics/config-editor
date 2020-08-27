@@ -80,7 +80,7 @@ class EditorDropDown extends React.Component {
           ref="fileUploader"
           style={{ display: "none" }}
           onChange={e => {
-            handleUploadedFile(e.target.files[0]);
+            handleUploadedFile(e.target.files[0], this.props.name);
             e.target.value = "";
           }}
         />

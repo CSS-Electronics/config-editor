@@ -3,6 +3,7 @@
 
 // Toggle demo mode on/off
 export const demoMode = false;
+export const demoConfig = "config-01.02.json" 
 
 // Note: These need to be updated with future firmware revisions
 export const uiSchemaAry = [
