@@ -103,7 +103,7 @@ export default (
       return {
         ...state,
         editorSchemaFiles: state.editorSchemaFiles.filter(
-          file => file.name.split(".").slice(-1)[0] == "json"
+          file => !file.name.includes("(local)")
         )
       };
     case actionsEditor.RESET_UPLOADED_SCHEMA_LIST:

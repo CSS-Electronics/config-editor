@@ -17,15 +17,13 @@ class EditorSchemaModal extends React.Component {
       editorUISchemaFiles,
       editorSchemaFiles,
       editorConfigFiles,
-      handleUiSchemaChange,
-      handleSchemaChange,
-      handleConfigChange,
       handleUplodedUISchema,
       handleUploadedSchema,
       handleUploadedConfig,
-      selectedUISchema,
-      selectedSchema,
-      selectedConfig
+      selecteduischema,
+      selectedschema,
+      selectedconfig,
+      handleDropdownChange
     } = this.props;
 
     return (
@@ -35,8 +33,8 @@ class EditorSchemaModal extends React.Component {
         <EditorDropdown
           options={editorUISchemaFiles}
           name="Presentation Mode"
-          selected={selectedUISchema}
-          onChange={handleUiSchemaChange}
+          selected={selecteduischema}
+          onChange={handleDropdownChange}
           handleUploadedFile={handleUplodedUISchema}
           customBackground={true}
           comment="The UIschema affects the visual presentation of the editor. It does not impact the Configuration File. It can also be used to hide e.g. advanced settings via a Simple variant - or show all settings via an Advanced variant."
@@ -44,8 +42,8 @@ class EditorSchemaModal extends React.Component {
         <EditorDropdown
           options={editorSchemaFiles}
           name="Rule Schema"
-          selected={selectedSchema}
-          onChange={handleSchemaChange}
+          selected={selectedschema}
+          onChange={handleDropdownChange}
           handleUploadedFile={handleUploadedSchema}
           customBackground={true}
           comment="The Rule Schema serves as a guide for populating the Configuration File - and for automatically validating a Configuration File."
@@ -53,8 +51,8 @@ class EditorSchemaModal extends React.Component {
         <EditorDropdown
           options={editorConfigFiles}
           name="Configuration File"
-          selected={selectedConfig}
-          onChange={handleConfigChange}
+          selected={selectedconfig}
+          onChange={handleDropdownChange}
           handleUploadedFile={handleUploadedConfig}
           comment="The Configuration File contains the settings that will be used on the device. You can upload a new Configuration File via the dropdown to modify it using the editor."
         />

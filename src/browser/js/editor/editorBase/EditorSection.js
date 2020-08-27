@@ -16,10 +16,13 @@ import EditorArrayFieldTemplate from "./EditorArrayFieldTemplate";
 import EditorChangesComparison from "./EditorChangesComparison";
 
 import * as actionsEditor from "./actions";
+import {getFileType} from "./utils"
 
 const regexRevision = new RegExp("\\d{2}\\.\\d{2}\\.json", "g");
 let isDownloadConfig = false;
 let activatedTab;
+
+
 
 export class EditorSection extends React.Component {
   constructor(props) {
@@ -34,14 +37,15 @@ export class EditorSection extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.escFunction = this.escFunction.bind(this);
     this.subMenuBtnClick = this.subMenuBtnClick.bind(this);
+    this.handleDropdownChange = this.handleDropdownChange.bind(this)
 
     this.state = {
       uischema: "",
       schema: "",
       config: "",
-      selectedUISchema: "",
-      selectedSchema: "",
-      selectedConfig: "",
+      selecteduischema: "",
+      selectedschema: "",
+      selectedconfig: "",
       configReview: { value: "None", label: "None" },
       revisedConfigFile: {},
       formData: {},
@@ -74,11 +78,24 @@ export class EditorSection extends React.Component {
     );
   }
 
+  handleDropdownChange(selection, dropdown){
+    const fileType = getFileType(dropdown)
+    this.setState(
+      {
+        [fileType]: selection,
+        ["selected" + fileType]: selection,
+      },
+      () => {
+        this.props.fetchFileContent(selection, fileType);
+      }
+    );
+  }
+
   handleUiSchemaChange(selection) {
     this.setState(
       {
         uischema: selection,
-        selectedUISchema: selection,
+        selecteduischema: selection,
       },
       () => {
         this.props.fetchUISchemaContent(this.state.uischema);
@@ -87,10 +104,11 @@ export class EditorSection extends React.Component {
   }
 
   handleSchemaChange(selection) {
-    this.setState(
+
+     this.setState(
       {
         schema: selection,
-        selectedSchema: selection,
+        selectedschema: selection,
       },
       () => {
         this.props.fetchSchemaContent(this.state.schema);
@@ -102,7 +120,7 @@ export class EditorSection extends React.Component {
     this.setState(
       {
         config: selection,
-        selectedConfig: selection,
+        selectedconfig: selection,
       },
       () => {
         this.props.fetchConfigContent(this.state.config, "editor");
@@ -155,7 +173,7 @@ export class EditorSection extends React.Component {
     if (this.props.editorSchemaFiles != nextProps.editorSchemaFiles) {
       this.setState({
         schema: "",
-        selectedSchema: "",
+        selectedschema: "",
       });
     }
 
@@ -171,17 +189,17 @@ export class EditorSection extends React.Component {
 
     if (uiLocal.length) {
       this.setState({
-        selectedUISchema: uiLocal[0].name,
+        selecteduischema: uiLocal[0].name,
       });
     }
     if (schemaLocal.length) {
       this.setState({
-        selectedSchema: schemaLocal[0].name,
+        selectedschema: schemaLocal[0].name,
       });
     }
     if (configLocal.length) {
       this.setState({
-        selectedConfig: configLocal[0].name,
+        selectedconfig: configLocal[0].name,
       });
     }
 
@@ -319,14 +337,12 @@ export class EditorSection extends React.Component {
       editorTools,
     } = this.props;
 
-    console.log(configContent);
-
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
 
     // Update Select boxes upon a "partial refresh" (pressing Configure while in Configure mode)
-    let selectedUISchemaAdj = this.state.selectedUISchema;
-    let selectedSchemaAdj = this.state.selectedSchema;
-    let selectedConfigAdj = this.state.selectedConfig;
+    let selecteduischemaAdj = this.state.selecteduischema;
+    let selectedschemaAdj = this.state.selectedschema;
+    let selectedconfigAdj = this.state.selectedconfig;
 
     const testUISchemaLoaded = editorUISchemaFiles.filter((file) =>
       file.name.includes("(local)")
@@ -338,22 +354,22 @@ export class EditorSection extends React.Component {
       file.name.includes("(local)")
     ).length;
 
-    if (testUISchemaLoaded === 0 && selectedUISchemaAdj.includes("(local)")) {
-      selectedUISchemaAdj =
+    if (testUISchemaLoaded === 0 && selecteduischemaAdj.includes("(local)")) {
+      selecteduischemaAdj =
         editorConfigFiles[0] && editorUISchemaFiles[0].name
           ? editorUISchemaFiles[0].name
           : "";
     }
 
-    if (testSchemaLoaded === 0 && selectedSchemaAdj.includes("(local)")) {
-      selectedSchemaAdj =
+    if (testSchemaLoaded === 0 && selectedschemaAdj.includes("(local)")) {
+      selectedschemaAdj =
         editorSchemaFiles[0] && editorSchemaFiles[0].name
           ? editorSchemaFiles[0].name
-          : selectedSchemaAdj;
+          : selectedschemaAdj;
     }
 
-    if (testConfigLoaded === 0 && selectedConfigAdj.includes("(local)")) {
-      selectedConfigAdj =
+    if (testConfigLoaded === 0 && selectedconfigAdj.includes("(local)")) {
+      selectedconfigAdj =
         editorConfigFiles[0] && editorConfigFiles[0].name
           ? editorConfigFiles[0].name
           : "";
@@ -374,15 +390,13 @@ export class EditorSection extends React.Component {
         class: "fa fa-cog",
         modal: (
           <EditorSchemaModal
-            selectedUISchema={selectedUISchemaAdj}
-            selectedSchema={selectedSchemaAdj}
-            selectedConfig={selectedConfigAdj}
+            selecteduischema={selecteduischemaAdj}
+            selectedschema={selectedschemaAdj}
+            selectedconfig={selectedconfigAdj}
             editorUISchemaFiles={editorUISchemaFiles}
             editorSchemaFiles={editorSchemaFiles}
             editorConfigFiles={editorConfigFiles}
-            handleUiSchemaChange={this.handleUiSchemaChange}
-            handleSchemaChange={this.handleSchemaChange}
-            handleConfigChange={this.handleConfigChange}
+            handleDropdownChange={this.handleDropdownChange}
           />
         ),
       }
@@ -537,6 +551,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    fetchFileContent: (fileName, fileType) =>
+    dispatch(actionsEditor.fetchFileContent(fileName, fileType)),
     fetchConfigContent: (filename, type) =>
       dispatch(actionsEditor.fetchConfigContent(filename, type)),
     fetchSchemaContent: (schema) =>

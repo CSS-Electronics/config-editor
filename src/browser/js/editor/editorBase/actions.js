@@ -22,6 +22,8 @@ export const SET_UISCHEMA_SOURCE = "editor/SET_UISCHEMA_SOURCE";
 export const SET_CONFIG_DATA_LOCAL = "SET_CONFIG_DATA_LOCAL";
 export const SET_CRC32_EDITOR_LIVE = "SET_CRC32_EDITOR_LIVE";
 
+import {isValidUISchema, isValidSchema, isValidConfig} from "./utils"
+
 // Toggle demo mode on/off
 const demoMode = false;
 
@@ -40,36 +42,19 @@ const schemaAry = [
   "schema-00.07.json | CANedge1",
 ];
 
-// -------------------------------------------------------
-// UTILS: Utils for testing schema name validity
-const isValidUISchema = (file) => {
-  const regexUiSchema = new RegExp(
-    "(^server_|^)uischema-\\d{2}\\.\\d{2}\\.json",
-    "g"
-  );
-  return regexUiSchema.test(file);
-};
 
-const isValidSchema = (file) => {
-  const regexSchema = new RegExp(
-    "(^([0-9A-Fa-f]){8}_|server_|^)schema-\\d{2}\\.\\d{2}\\.json",
-    "g"
-  );
-  return regexSchema.test(file);
-};
-
-const isValidConfig = (file) => {
-  const regexConfig = new RegExp(
-    "(^([0-9A-Fa-f]){8}_|server_|^)config-\\d{2}\\.\\d{2}\\.json",
-    "g"
-  );
-  return regexConfig.test(file);
-};
 
 const regexUISchemaPublic = new RegExp(
   /^uischema-\d{2}\.\d{2}\.json \| (Advanced|Simple)$/,
   "g"
 );
+
+const regexSchemaPublic = new RegExp(
+  /^schema-\d{2}\.\d{2}\.json \| CANedge(1|2)$/,
+  "g"
+);
+
+
 
 // -------------------------------------------------------
 // CRC32: Calculate crc32 of Configuration File
@@ -108,6 +93,8 @@ export const setCrc32EditorLive = (crc32EditorLive) => ({
   crc32EditorLive,
 });
 
+
+
 // -------------------------------------------------------
 // UISCHEMA: load the Simple/Advanced default UIschema in the online & offline editor
 export const publicUiSchemaFiles = () => {
@@ -130,7 +117,7 @@ export const loadUISchemaSimpleAdvanced = () => {
 
     const defaultUiSchemaContent = require(`../../../schema/${
       defaultUiSchema.split(" | ")[1]
-    }/${defaultUiSchema.split(" ")[0]}`);
+    }/${defaultUiSchema.split(" ")[0]}`)
 
     dispatch(setUISchemaFile(uiSchemaAry));
     dispatch(setUISchemaContent(defaultUiSchemaContent));
@@ -154,6 +141,56 @@ export const fetchUISchemaContent = (fileName) => {
     }
   };
 };
+
+export const loadFile = (fileName) => {
+  const schema = require(`../../../schema/${
+    fileName.split(" | ")[1]
+  }/${fileName.split(" ")[0]}`);
+
+  return schema;
+}
+
+export const fetchFileContent = (fileName, type) => {
+  return function (dispatch) {
+    // Persist the editor formdata before proceeding
+    dispatch(setConfigContentPreSubmit());
+
+    // Remove existing "uploaded" files from dropdown and set Schema to loaded file from schema/ folder
+    // Note that for cases where files are uploaded, the below is handled as part of the upload function
+    switch (true) {
+      case type == "uischema":
+        dispatch(resetLocalUISchemaList())
+
+        if(fileName.match(regexUISchemaPublic) != null){
+          dispatch(setUISchemaContent(loadFile(fileName)))
+        }else{
+          dispatch(setUISchemaContent(null))
+        }
+
+        break;
+      case type == "schema":
+        if(fileName.match(regexSchemaPublic) != null){
+          dispatch(setSchemaContent(loadFile(fileName)))
+        }else{
+          dispatch(setSchemaContent(null))
+        }
+
+        break;
+      case type == "config":
+        dispatch(resetLocalConfigList());
+
+        if (fileName == "None") {
+          dispatch(setConfigContent(null));
+          dispatch(setUpdatedFormData(null));
+          dispatch(setConfigContentPreChange(""));
+        } 
+
+        break;
+    }
+
+  };
+};
+
 
 export const handleUploadedUISchema = (file) => {
   return function (dispatch) {
