@@ -115,6 +115,7 @@ export const fetchFileContent = (fileName, type) => {
 
         break;
       case type == "config-review":
+        // reload the original local config file for review purposes
         dispatch(
           setConfigContentPreChange(getState().editor.configContentLocal)
         );
@@ -184,14 +185,8 @@ export const handleUploadedFile = (file, dropdown) => {
   };
 };
 
-// ** can be generalized if it works like state
-export const setUISchemaFile = (UISchemaFiles) => ({
-  type: SET_UISCHEMA_LIST,
-  UISchemaFiles: UISchemaFiles.map((file, index) => ({
-    name: file,
-    selected: index == 0 ? true : false,
-  })),
-});
+// -------------------------------------------------------
+
 
 export const resetUISchemaList = () => ({
   type: RESET_UISCHEMA_LIST,
@@ -207,6 +202,14 @@ export const setUISchemaContent = (uiContent) => {
 
 export const resetLocalUISchemaList = () => ({
   type: RESET_LOCAL_UISCHEMA_LIST,
+});
+
+export const setUISchemaFile = (UISchemaFiles) => ({
+  type: SET_UISCHEMA_LIST,
+  UISchemaFiles: UISchemaFiles.map((file, index) => ({
+    name: file,
+    selected: index == 0 ? true : false,
+  })),
 });
 
 // -------------------------------------------------------
@@ -265,15 +268,6 @@ export const resetUploadedSchemaList = () => ({
 
 // -------------------------------------------------------
 // CONFIGURATION FILE:
-
-export const setConfigFile = (configFiles) => ({
-  type: SET_CONFIG_LIST,
-  configFiles: configFiles.map((file, index) => ({
-    name: file,
-    selected: index == 0 ? true : false,
-  })),
-});
-
 export const saveUpdatedConfiguration = (filename, content) => {
   return function (dispatch) {
     dispatch(setConfigContent(content));
@@ -298,35 +292,38 @@ export const setUpdatedFormDataValue = (formData) => {
   };
 };
 
+
+export const setConfigFile = (configFiles) => ({
+  type: SET_CONFIG_LIST,
+  configFiles: configFiles.map((file, index) => ({
+    name: file,
+    selected: index == 0 ? true : false,
+  })),
+});
+
+// this ensures that if the rjsf Form is reloaded (e.g. due to state change), it uses the latest formData
 export const setConfigContentPreSubmit = () => {
   return function (dispatch, getState) {
     dispatch(setConfigContent(getState().editor.formData));
   };
 };
 
+// this stores the original loaded config content (before any updates are made via the Form)
 export const setConfigContentPreChange = (configContentPreChange) => ({
   type: SET_CONFIG_DATA_PRE_CHANGE,
   configContentPreChange,
 });
 
+// this stores the original loaded config content from a local file
 export const setConfigContentLocal = (configContentLocal) => ({
   type: SET_CONFIG_DATA_LOCAL,
   configContentLocal,
 });
 
+// this sets the config content, e.g. for use as input in the editor Form
 export const setConfigContent = (configContent) => ({
   type: SET_CONFIG_DATA,
   configContent,
-});
-
-export const setUpdatedConfig = () => ({
-  type: SET_UPDATED_CONFIG,
-  configUpdate: true,
-});
-
-export const resetConfigFiles = () => ({
-  type: RESET_CONFIG_LIST,
-  configFiles: [],
 });
 
 export const resetLocalConfigList = () => ({

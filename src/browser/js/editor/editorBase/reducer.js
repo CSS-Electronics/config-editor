@@ -26,7 +26,6 @@ export default (
         editorUISchemaFiles: []
       };
     case actionsEditor.SET_CONFIG_DATA:
-      console.log("config",action.configContent)
       return {
         ...state,
         configContent: action.configContent
@@ -41,11 +40,6 @@ export default (
       return {
         ...state,
         uiContent: action.uiContent
-      };
-    case actionsEditor.SET_UPDATED_CONFIG:
-      return {
-        ...state,
-        configUpdate: action.configUpdate
       };
     case actionsEditor.SET_UISCHEMA_LIST:
       return {
