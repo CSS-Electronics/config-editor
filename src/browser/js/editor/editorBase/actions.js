@@ -32,22 +32,13 @@ import {
   demoMode,
   uiSchemaAry,
   schemaAry,
+  crcBrowserSupport
 } from "./utils";
 
 // -------------------------------------------------------
-// CRC32: Calculate crc32 of Configuration File
-const { detect } = require("detect-browser");
-const browser = detect();
-
-let crcBrowserSupport = [
-  "chrome",
-  "firefox",
-  "opera",
-  "safari",
-  "edge",
-].includes(browser.name);
-
+// CRC32: Calculate checksums for comparison review of config files
 export const calcCrc32EditorLive = () => {
+  console.log("crcBrowserSupport", crcBrowserSupport)
   return function (dispatch, getState) {
     let formData = getState().editor.formData;
 

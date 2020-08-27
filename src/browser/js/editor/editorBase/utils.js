@@ -78,3 +78,16 @@ export const loadFile = (fileName) => {
 
   return schema;
 }
+
+
+// CRC32: Calculate crc32 of Configuration File
+const { detect } = require("detect-browser");
+const browser = detect();
+
+export const crcBrowserSupport = [
+  "chrome",
+  "firefox",
+  "opera",
+  "safari",
+  "edge",
+].includes(browser.name);
