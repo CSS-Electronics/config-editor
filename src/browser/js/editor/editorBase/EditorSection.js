@@ -201,11 +201,6 @@ export class EditorSection extends React.Component {
 
     this.setState(
       {
-        uischema: this.state.uischema
-          ? this.state.uischema
-          : this.props.editorUISchemaFiles.length
-          ? this.props.editorUISchemaFiles[0].key
-          : null,
         schema: checkUpload
           ? checkUpload
           : this.state.schema
@@ -261,7 +256,6 @@ export class EditorSection extends React.Component {
   }
 
   handleChange = ({ formData }) => {
-    // save the latest formData value to store
     this.props.setUpdatedFormData(formData);
   };
 
@@ -280,45 +274,8 @@ export class EditorSection extends React.Component {
       editorTools,
     } = this.props;
 
-    // Clean up the adjusted stuff
-
+    // add navigation bar
     let FormWithNav = schemaContent ? applyNav(Form, EditorNavs) : Form;
-
-    // Update Select boxes upon a "partial refresh" (pressing Configure while in Configure mode)
-    let selecteduischemaAdj = this.state.selecteduischema;
-    let selectedschemaAdj = this.state.selectedschema;
-    let selectedconfigAdj = this.state.selectedconfig;
-
-    const testUISchemaLoaded = editorUISchemaFiles.filter((file) =>
-      file.name.includes("(local)")
-    ).length;
-    const testSchemaLoaded = editorSchemaFiles.filter((file) =>
-      file.name.includes("(local)")
-    ).length;
-    const testConfigLoaded = editorConfigFiles.filter((file) =>
-      file.name.includes("(local)")
-    ).length;
-
-    if (testUISchemaLoaded === 0 && selecteduischemaAdj.includes("(local)")) {
-      selecteduischemaAdj =
-        editorConfigFiles[0] && editorUISchemaFiles[0].name
-          ? editorUISchemaFiles[0].name
-          : "";
-    }
-
-    if (testSchemaLoaded === 0 && selectedschemaAdj.includes("(local)")) {
-      selectedschemaAdj =
-        editorSchemaFiles[0] && editorSchemaFiles[0].name
-          ? editorSchemaFiles[0].name
-          : selectedschemaAdj;
-    }
-
-    if (testConfigLoaded === 0 && selectedconfigAdj.includes("(local)")) {
-      selectedconfigAdj =
-        editorConfigFiles[0] && editorConfigFiles[0].name
-          ? editorConfigFiles[0].name
-          : "";
-    }
 
     // add the default 'base modals' to the modals list
     let editorToolsFull = editorTools.concat(
@@ -335,9 +292,9 @@ export class EditorSection extends React.Component {
         class: "fa fa-cog",
         modal: (
           <EditorSchemaModal
-            selecteduischema={selecteduischemaAdj}
-            selectedschema={selectedschemaAdj}
-            selectedconfig={selectedconfigAdj}
+            selecteduischema={this.state.selecteduischema}
+            selectedschema={this.state.selectedschema}
+            selectedconfig={this.state.selectedconfig}
             editorUISchemaFiles={editorUISchemaFiles}
             editorSchemaFiles={editorSchemaFiles}
             editorConfigFiles={editorConfigFiles}
@@ -348,111 +305,77 @@ export class EditorSection extends React.Component {
     );
 
     return (
-      <div className="file-explorer">
-        <div className={"fe-body fe-body-offline"}>
-          <header className="fe-header top-header" />
-          <div
-            className={classNames({
-              "fe-header config-editor": true,
-              "encryption-padding": this.state.activeSideBar != "none",
-            })}
-          >
-            {editorToolsFull.map((modal) => (
-              <div
-                style={{
-                  display: modal.name == this.state.activeSideBar ? "" : "none",
-                }}
-              >
-                <EditorToolModalWrapper
-                  modal={modal.modal}
-                  onClick={() => this.subMenuBtnClick("none")}
-                />
-              </div>
-            ))}
+      <div className="file-explorer fe-body fe-body-offline">
+        <header className="fe-header top-header" />
+        <div
+          className={classNames({
+            "fe-header config-editor": true,
+            "encryption-padding": this.state.activeSideBar != "none",
+          })}
+        >
+          {editorToolsFull.map((modal) => (
+            <div
+              style={{
+                display: modal.name == this.state.activeSideBar ? "" : "none",
+              }}
+            >
+              <EditorToolModalWrapper
+                modal={modal.modal}
+                onClick={() => this.subMenuBtnClick("none")}
+              />
+            </div>
+          ))}
+
+          <div>
+            <br />
+            <br />
+            <br />
+            <br />
 
             <div>
-              <br />
-              <br />
-              <br />
-              <br />
+              <FormWithNav
+                omitExtraData={true}
+                liveOmit={true}
+                liveValidate={true}
+                noHtml5Validate={true}
+                schema={schemaContent ? schemaContent : {}}
+                uiSchema={uiContent ? uiContent : {}}
+                formData={configContent ? configContent : {}}
+                onSubmit={this.onSubmit}
+                onChange={this.handleChange}
+                onError={this.handleError}
+                onNavChange={this.onNavChange.bind(this)}
+                ArrayFieldTemplate={EditorArrayFieldTemplate}
+                activeNav={activatedTab}
+              >
+                <EditorChangesComparison
+                  isCompareChanges={this.state.isCompareChanges}
+                  revisedConfigFile={this.state.revisedConfigFile}
+                  options={editorConfigFiles}
+                  selected={this.state.configReview}
+                  handleDropdownChange={this.handleDropdownChange}
+                  closeChangesModal={this.closeChangesModal}
+                  enableDownload={this.enableDownload.bind(this)}
+                />
 
-              <div>
-                <FormWithNav
-                  omitExtraData={true}
-                  liveOmit={true}
-                  liveValidate={true}
-                  noHtml5Validate={true}
-                  schema={schemaContent ? schemaContent : {}}
-                  uiSchema={uiContent ? uiContent : {}}
-                  formData={configContent ? configContent : {}}
-                  onSubmit={this.onSubmit}
-                  onChange={this.handleChange}
-                  onError={this.handleError}
-                  onNavChange={this.onNavChange.bind(this)}
-                  ArrayFieldTemplate={EditorArrayFieldTemplate}
-                  activeNav={activatedTab}
-                >
-                  <div
-                    className={
-                      this.state.isCompareChanges
-                        ? "show modal-custom-wrapper"
-                        : "hidden modal-custom-wrapper"
-                    }
-                  >
-                    <div
-                      className={
-                        this.state.isCompareChanges
-                          ? "show modal-custom"
-                          : "hidden modal-custom"
-                      }
-                    >
-                      <EditorChangesComparison
-                        revisedConfigFile={this.state.revisedConfigFile}
-                        options={editorConfigFiles}
-                        selected={this.state.configReview}
-                        handleDropdownChange={this.handleDropdownChange}
-                        closeChangesModal={this.closeChangesModal}
+                <div className="config-bar fe-sidebar-shift-offline">
+                  <div className="col-xs-1" style={{ minWidth: "120px" }}>
+                    <button type="submit" className="btn btn-primary">
+                      {" "}
+                      Review changes{" "}
+                    </button>
+                  </div>
+                  <div className="col-xs-7" style={{ float: "left" }}>
+                    {editorToolsFull.map((modal) => (
+                      <EditorToolButton
+                        onClick={() => this.subMenuBtnClick(modal.name)}
+                        comment={modal.comment}
+                        className={modal.class}
                       />
-                      <div className="modal-custom-footer">
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          disabled={true}
-                        >
-                          {" "}
-                          Submit to S3{" "}
-                        </button>{" "}
-                        <button
-                          type="submit"
-                          onClick={this.enableDownload.bind(this)}
-                          className="btn btn-primary ml15"
-                        >
-                          {" "}
-                          Download to disk{" "}
-                        </button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-
-                  <div className={"config-bar fe-sidebar-shift-offline"}>
-                    <div className="col-xs-1" style={{ minWidth: "120px" }}>
-                      <button type="submit" className="btn btn-primary">
-                        {" "}
-                        Review changes{" "}
-                      </button>
-                    </div>
-                    <div className="col-xs-7" style={{ float: "left" }}>
-                      {editorToolsFull.map((modal) => (
-                        <EditorToolButton
-                          onClick={() => this.subMenuBtnClick(modal.name)}
-                          comment={modal.comment}
-                          className={modal.class}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </FormWithNav>
-              </div>
+                </div>
+              </FormWithNav>
             </div>
           </div>
         </div>
