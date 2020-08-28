@@ -7,7 +7,7 @@ import {
   BitRateModal,
 } from "config-editor-tools";
 
-import EditorSection from "./editorBase/EditorSection";
+import {EditorSection} from "config-editor-base";
 
 import * as actionsAlert from "../alert/actions";
 import AlertContainer from "../alert/AlertContainer";
