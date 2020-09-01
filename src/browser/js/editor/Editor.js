@@ -12,23 +12,27 @@ import {EditorSection} from "config-editor-base";
 import * as actionsAlert from "../alert/actions";
 import AlertContainer from "../alert/AlertContainer";
 
+// define editor title and version
+const title = TYPE + " config editor"
+const version = "v01.01.00"
+
 // define UIschema and Rule Schema names for auto-loading purposes
-export const uiSchemaAry = [
+export const uiSchemaAry = {"CANedge": [
   "uischema-01.02.json | Simple",
   "uischema-01.02.json | Advanced",
-];
+], "CANmod.gps": []}
 
-export const schemaAry = [
+export const schemaAry = {"CANedge": [
   "schema-01.02.json | CANedge2",
   "schema-01.02.json | CANedge1",
   "schema-00.07.json | CANedge2",
   "schema-00.07.json | CANedge1",
-];
+], "CANmod.gps":[]}
 
 
 class Editor extends React.Component {
   render() {
-    let editorTools = [
+    let editorTools = {"CANedge": [
       {
         name: "encryption-modal",
         comment: "Encryption tool",
@@ -47,17 +51,24 @@ class Editor extends React.Component {
         class: "fa fa-calculator",
         modal: <BitRateModal showAlert={this.props.showAlert} />,
       },
-    ];
+    ], "CANmod.gps": []};
 
     return (
        <div className="file-explorer">
+         
+         <header className="fe-header top-header">
+           <div className="header-text">
+           <span className="editor-title">{title}</span><br/>
+           <span className="editor-version">{version}</span>
+           </div>
+           </header>
 	   <div className="fe-body fe-body-offline" >
         <AlertContainer />
         <EditorSection
-          editorTools={editorTools}
+          editorTools={editorTools[TYPE]}
           showAlert={this.props.showAlert}
-		  uiSchemaAry={uiSchemaAry}
-          schemaAry={schemaAry}
+		      uiSchemaAry={uiSchemaAry[TYPE]}
+          schemaAry={schemaAry[TYPE]}
         />
 		</div>
       </div>

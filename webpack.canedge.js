@@ -21,21 +21,21 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
 const definePlugin = new webpack.DefinePlugin({
-  EDITOR: JSON.stringify({ offline: true })
+  TYPE: JSON.stringify("CANedge")
 });
 
 const progressPlugin = new webpack.ProgressPlugin();
 
 const shellPlugin = new WebpackShellPlugin({
-  onBuildStart: ['echo "Simple editor build starts"'],
-  onBuildEnd: ['echo "Simple editor build complete"'],
-  onBuildExit: ["node simple-editor.js"]
+  onBuildStart: ['echo "CANedge editor build starts"'],
+  onBuildEnd: ['echo "CANedge editor build complete"'],
+  onBuildExit: ["node canedge-editor.js"]
 });
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/browser/index.html",
   filename: "./index.html",
-  title: "Configuration Editor",
+  title: "CANedge Config Editor",
   inject: false,
   minify: true
 });
@@ -44,7 +44,7 @@ module.exports = {
   context: __dirname,
   entry: [path.resolve(__dirname, "src/browser/simple.js")],
   output: {
-    path: __dirname + "/simple",
+    path: __dirname + "/canedge-editor",
     filename: "bundle.js"
   },
   resolve: {

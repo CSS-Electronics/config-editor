@@ -1,6 +1,6 @@
 {
   "name": "config-editor",
-  "version": "1.0.0",
+  "version": "01.01.00",
   "description": "A React based JSON Schema editor",
   "author": "CSS Electronics",
   "license": "MIT",
@@ -9,12 +9,11 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.simple.js --mode production --open --progress --colors --hot",
     "build": "webpack --mode production",
-    "simple": "webpack --config webpack.simple.js --mode production",
+    "canedge": "webpack --config webpack.canedge.js --mode production",
+	"gps": "webpack --config webpack.gps.js --mode production",
     "test": "jest"
   },
   "keywords": [],
-  "author": "CSS Electronics",
-  "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
