@@ -2,6 +2,9 @@
   "name": "config-editor",
   "version": "1.0.0",
   "description": "A React based JSON Schema editor",
+  "author": "CSS Electronics",
+  "license": "MIT",
+  "repository": "CSS-Electronics/config-editor",
   "main": "simple.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.simple.js --mode production --open --progress --colors --hot",
