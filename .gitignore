@@ -5,3 +5,5 @@ site
 simple/*
 *.bat
 analyse.js
+canedge-editor/*
+gps-editor/*
