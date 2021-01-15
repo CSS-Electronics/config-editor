@@ -35,3 +35,11 @@ The CANedge config editor is very light and is based on two imported modules:
 
 These sub modules are also used in other projects by CSS Electronics, for example [CANcloud](https://github.com/CSS-Electronics/cancloud).
 
+----
+
+## Updating embedded Rule Schema and UIschema files
+If the embedded schema files need to be updated, the process should be as follows:
+1. Clone [config-editor-base](https://github.com/CSS-Electronics/config-editor-base)
+2. Follow the README in that repo on how to add the new files, then publish a new npm package 
+3. In this repo, update the `Editor.js` file with the new entries to the UIschema and Rule Schema arrays
+4. Build the new config editor

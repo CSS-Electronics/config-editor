@@ -14,19 +14,21 @@ import AlertContainer from "../alert/AlertContainer";
 
 // define editor title and version
 const title = TYPE + " config editor"
-const version = "v1.3.1"
+const version = "v1.4.3"
 
 // define UIschema and Rule Schema names for auto-loading purposes
 export const uiSchemaAry = {"CANedge": [
   "uischema-01.03.json | Simple",
   "uischema-01.03.json | Advanced",
+  "uischema-01.04.json | Simple",
+  "uischema-01.04.json | Advanced",
 ], "CANmod.gps": []}
 
 export const schemaAry = {"CANedge": [
+  "schema-01.04.json | CANedge2",
+  "schema-01.04.json | CANedge1",
   "schema-01.03.json | CANedge2",
   "schema-01.03.json | CANedge1",
-  "schema-01.02.json | CANedge2",
-  "schema-01.02.json | CANedge1",
 ], "CANmod.gps":[]}
 
 
