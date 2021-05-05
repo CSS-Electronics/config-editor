@@ -17,7 +17,7 @@ Clone this repository and run `npm install`.
 The config editor supports building various editor variants:
 ```
 npm run canedge 
-npm run gps 
+npm run canmod 
 ...
 ```
 

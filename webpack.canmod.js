@@ -21,21 +21,21 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
 const definePlugin = new webpack.DefinePlugin({
-  TYPE: JSON.stringify("CANmod.gps")
+  TYPE: JSON.stringify("CANmod")
 });
 
 const progressPlugin = new webpack.ProgressPlugin();
 
 const shellPlugin = new WebpackShellPlugin({
-  onBuildStart: ['echo "GPS editor build starts"'],
-  onBuildEnd: ['echo "GPS editor build complete"'],
-  onBuildExit: ["node gps-editor.js"]
+  onBuildStart: ['echo "CANmod editor build starts"'],
+  onBuildEnd: ['echo "CANmod editor build complete"'],
+  onBuildExit: ["node canmod-editor.js"]
 });
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/browser/index.html",
   filename: "./index.html",
-  title: "CANmod.gps Config Editor",
+  title: "CANmod Config Editor",
   inject: false,
   minify: true
 });
@@ -44,7 +44,7 @@ module.exports = {
   context: __dirname,
   entry: [path.resolve(__dirname, "src/browser/simple.js")],
   output: {
-    path: __dirname + "/gps-editor",
+    path: __dirname + "/canmod-editor",
     filename: "bundle.js"
   },
   resolve: {

@@ -14,7 +14,7 @@ import AlertContainer from "../alert/AlertContainer";
 
 // define editor title and version
 const title = TYPE + " config editor"
-const version = "v1.4.3"
+const version = "v1.4.5"
 
 // define UIschema and Rule Schema names for auto-loading purposes
 export const uiSchemaAry = {"CANedge": [
@@ -22,15 +22,16 @@ export const uiSchemaAry = {"CANedge": [
   "uischema-01.03.json | Advanced",
   "uischema-01.04.json | Simple",
   "uischema-01.04.json | Advanced",
-], "CANmod.gps": []}
+], "CANmod": []}
 
 export const schemaAry = {"CANedge": [
   "schema-01.04.json | CANedge2",
   "schema-01.04.json | CANedge1",
   "schema-01.03.json | CANedge2",
   "schema-01.03.json | CANedge1",
-], "CANmod.gps":[]}
+], "CANmod":[]}
 
+export const demoMode = false
 
 class Editor extends React.Component {
   render() {
@@ -53,7 +54,7 @@ class Editor extends React.Component {
         class: "fa fa-calculator",
         modal: <BitRateModal showAlert={this.props.showAlert} />,
       },
-    ], "CANmod.gps": []};
+    ], "CANmod": []};
 
     return (
        <div className="file-explorer">
@@ -71,6 +72,7 @@ class Editor extends React.Component {
           showAlert={this.props.showAlert}
 		      uiSchemaAry={uiSchemaAry[TYPE]}
           schemaAry={schemaAry[TYPE]}
+          demoMode={demoMode}
         />
 		</div>
       </div>
