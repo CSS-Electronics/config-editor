@@ -1,3 +1,37 @@
+@-webkit-keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    16% {
+        opacity: 1;
+    }
+    84% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    16% {
+        opacity: 1;
+    }
+    84% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.fadeout-box {
+    opacity: 0;
+    -webkit-animation: fadeInOut 6s;
+    animation: fadeInOut 6s;
+}
+
 .schema-loader-callout{
   position: fixed;
   z-index: 9999;
