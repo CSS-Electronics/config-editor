@@ -22,7 +22,7 @@ export let alertId = 0;
 export const set = alert => {
   const id = alertId++;
   return dispatch => {
-    if (alert.type !== "danger" || alert.autoClear) {
+    if (alert.type !== "danger" && alert.type !== "warning" || alert.autoClear) {
       setTimeout(() => {
         dispatch({
           type: CLEAR,
