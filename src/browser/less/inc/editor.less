@@ -731,11 +731,16 @@ fieldset {
   border-bottom: 2px solid @blue;
 }
 
+div[class*="form-group field field-object"] > fieldset > legend {
+  display:none;
+}
+
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 12px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size:14px;
 }
 
 .navbar-nav > li > a:hover {
@@ -789,6 +794,7 @@ fieldset {
 
 .navbar-ul-margin-reduce {
   margin-left: -30px;
+  margin-bottom:15px;
   cursor: pointer;
 }
 

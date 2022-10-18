@@ -1,6 +1,6 @@
 {
   "name": "config-editor",
-  "version": "1.4.8",
+  "version": "1.6.6",
   "description": "A React based JSON Schema editor",
   "author": "CSS Electronics",
   "license": "MIT",
@@ -42,8 +42,8 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bootstrap": "^3.3.6",
     "classnames": "^2.2.6",
-    "config-editor-base": "^1.5.8",
-    "config-editor-tools": "^1.1.1",
+    "config-editor-base": "^1.6.6",
+    "config-editor-tools": "^1.1.2",
     "crc": "^3.8.0",
     "crypto": "^1.0.1",
     "deepmerge": "^4.1.1",
@@ -57,11 +57,9 @@
     "react-dom": "^16.5.2",
     "react-files": "^2.4.8",
     "react-gh-like-diff": "^2.0.2",
-    "react-jsonschema-form": "^2.0.0-alpha.1",
-    "react-jsonschema-form-pagination": "^0.3.12",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-select": "^2.4.1",
+    "react-select": "^3.1.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   }
