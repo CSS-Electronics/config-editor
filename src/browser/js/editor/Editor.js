@@ -14,7 +14,7 @@ import AlertContainer from "../alert/AlertContainer";
 
 // define editor title and version
 const title = TYPE + " config editor"
-const version = "v2.7.2"
+const version = "v2.7.7"
 
 // define UIschema and Rule Schema names for auto-loading purposes
 export const uiSchemaAry = {"CANedge": [
@@ -24,6 +24,8 @@ export const uiSchemaAry = {"CANedge": [
   "uischema-01.07.json | Advanced",
   "uischema-01.08.json | Simple",
   "uischema-01.08.json | Advanced",
+  "uischema-01.09.json | Simple",
+  "uischema-01.09.json | Advanced"
 ], "CANmod": []}
 
 export const schemaAry = {"CANedge": [
@@ -39,6 +41,11 @@ export const schemaAry = {"CANedge": [
   "schema-01.08.json | CANedge3 GNSS",
   "schema-01.08.json | CANedge2 GNSS",
   "schema-01.08.json | CANedge1 GNSS",
+  "schema-01.09.json | CANedge2",
+  "schema-01.09.json | CANedge1",
+  "schema-01.09.json | CANedge3 GNSS",
+  "schema-01.09.json | CANedge2 GNSS",
+  "schema-01.09.json | CANedge1 GNSS"
 ], "CANmod":[]}
 
 export const demoMode = false
