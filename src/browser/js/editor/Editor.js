@@ -11,10 +11,11 @@ import {EditorSection, OBDTool, FilterBuilderTool} from "config-editor-base";
 
 import * as actionsAlert from "../alert/actions";
 import AlertContainer from "../alert/AlertContainer";
+import packageJson from "../../../../package.json";
 
-// define editor title and version
+// define editor title and version (synced with package.json version)
 const title = TYPE + " config editor"
-const version = "v2.9.3"
+const version = "v" + packageJson.version
 
 // define UIschema and Rule Schema names for auto-loading purposes
 export const uiSchemaAry = {"CANedge": [
@@ -58,7 +59,7 @@ export const schemaAry = {"CANedge": [
   "schema-01.05.json | CANmod.temp"
 ]}
 
-export const demoMode = false
+export const demoMode = DEMO_MODE
 
 class Editor extends React.Component {
   render() {

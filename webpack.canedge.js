@@ -21,7 +21,8 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
 const definePlugin = new webpack.DefinePlugin({
-  TYPE: JSON.stringify("CANedge")
+  TYPE: JSON.stringify("CANedge"),
+  DEMO_MODE: JSON.stringify(process.env.DEMO_MODE === "true")
 });
 
 const progressPlugin = new webpack.ProgressPlugin();

@@ -1,0 +1,1 @@
+npm install config-editor-base@latest --force

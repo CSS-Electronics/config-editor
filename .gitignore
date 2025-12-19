@@ -3,7 +3,6 @@ dist
 site
 .eslintrc.json
 simple/*
-*.bat
 analyse.js
 canedge-editor/*
 gps-editor/*
