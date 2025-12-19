@@ -7,14 +7,14 @@ import {
   BitRateModal,
 } from "config-editor-tools";
 
-import {EditorSection} from "config-editor-base";
+import {EditorSection, OBDTool, FilterBuilderTool} from "config-editor-base";
 
 import * as actionsAlert from "../alert/actions";
 import AlertContainer from "../alert/AlertContainer";
 
 // define editor title and version
 const title = TYPE + " config editor"
-const version = "v2.8.3"
+const version = "v2.9.0"
 
 // define UIschema and Rule Schema names for auto-loading purposes
 export const uiSchemaAry = {"CANedge": [
@@ -64,6 +64,18 @@ class Editor extends React.Component {
   render() {
     let editorTools = {"CANedge": [
       {
+        name: "obd-modal",
+        comment: "OBD tool",
+        class: "fa fa-car",
+        modal: <OBDTool showAlert={this.props.showAlert} />,
+      },
+      {
+        name: "filter-builder-modal",
+        comment: "Filter builder",
+        class: "fa fa-sliders",
+        modal: <FilterBuilderTool showAlert={this.props.showAlert} deviceType={TYPE} />,
+      },
+      {
         name: "encryption-modal",
         comment: "Encryption tool",
         class: "fa fa-lock",
@@ -81,7 +93,14 @@ class Editor extends React.Component {
         class: "fa fa-calculator",
         modal: <BitRateModal showAlert={this.props.showAlert} />,
       },
-    ], "CANmod": []};
+    ], "CANmod": [
+      {
+        name: "filter-builder-modal",
+        comment: "Filter builder",
+        class: "fa fa-sliders",
+        modal: <FilterBuilderTool showAlert={this.props.showAlert} deviceType={TYPE} />,
+      },
+    ]};
 
     return (
        <div className="file-explorer">
