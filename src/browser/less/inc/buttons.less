@@ -13,6 +13,12 @@
     &:focus {
         .opacity(0.9);
     }
+
+    &:disabled,
+    &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 /*-----------------------------------
@@ -37,6 +43,11 @@
 
 .btn-primary {
     .btn-variant(@blue, @white);
+}
+
+.btn-white {
+    .btn-variant(#fff, #333);
+    border: 1px solid #ccc; // bordered white button (matches CANcloud / "Reset filters")
 }
 
 .btn-disabled {

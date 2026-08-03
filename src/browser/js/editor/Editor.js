@@ -5,6 +5,7 @@ import {
   EncryptionModal,
   FilterModal,
   BitRateModal,
+  MigrationModal,
 } from "config-editor-tools";
 
 import {EditorSection, OBDTool, FilterBuilderTool} from "config-editor-base";
@@ -65,6 +66,12 @@ class Editor extends React.Component {
   render() {
     let editorTools = {"CANedge": [
       {
+        name: "migration-modal",
+        comment: "Migrate Configuration File",
+        class: "fa fa-arrow-circle-up",
+        modal: <MigrationModal showAlert={this.props.showAlert} schemaAry={schemaAry[TYPE]} uiSchemaAry={uiSchemaAry[TYPE]} />,
+      },
+      {
         name: "obd-modal",
         comment: "OBD tool",
         class: "fa fa-car",
@@ -111,6 +118,17 @@ class Editor extends React.Component {
            <span className="editor-title">{title}</span><br/>
            <span className="editor-version">{version}</span>
            </div>
+           {/* TEMP PROMOTION: CANsub promo - remove this block (and .editor-news in editor.less) when done */}
+           <span className="editor-news">
+             New:{" "}
+             <a
+               href="https://www.csselectronics.com/pages/can-bus-hardware-products#can-interfaces"
+               target="_blank"
+               rel="noopener noreferrer"
+             >
+               CANsub - 2-4 x CAN FD interface (USB/Ethernet)
+             </a>
+           </span>
            </header>
 	   <div className="fe-body fe-body-offline" >
         <AlertContainer />

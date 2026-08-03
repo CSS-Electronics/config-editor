@@ -6,3 +6,4 @@ simple/*
 analyse.js
 canedge-editor/*
 gps-editor/*
+*.bat

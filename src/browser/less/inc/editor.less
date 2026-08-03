@@ -85,6 +85,26 @@
   font-family: Consolas;
 }
 
+/* TEMP PROMOTION: CANsub promo - remove this block (and .editor-news in Editor.js) when done */
+@keyframes newsFade {
+  0%   { color: #46a5e0; }
+  60%  { color: #46a5e0; }
+  100% { color: rgb(237, 237, 237); }
+}
+.editor-news{
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  font-size: 10px;
+  color: rgb(237, 237, 237);
+  animation: newsFade 5s ease-in forwards;
+  a{
+    color: inherit;
+    text-decoration: underline;
+    transition: none;
+  }
+}
+
 /*--------------------------
     Hidden
 ----------------------------*/
@@ -335,9 +355,14 @@
 
 .config-bar-btn {
   width: 30px;
+  height: 30px;
+  padding: 0; // drop the asymmetric .btn padding so the icon is truly centered
   border-radius: 20px !important;
   color: @text-color;
   font-size: 14px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .config-bar {
@@ -373,6 +398,10 @@
 }
 .encryption-padding {
   padding-right: 340px !important;
+}
+
+.encryption-padding-expanded {
+  padding-right: calc(50% + 20px) !important;
 }
 
 .text-area-hover {
@@ -438,47 +467,70 @@
   font-family: Consolas;
 }
 
-.checkbox-design{
+/* the OBD PID rows wrap the checkbox in a fixed-width span; make that first
+   span a flex box and center the checkbox within it (margin:auto is robust to
+   the wrapper's line-height-inflated height) so the small box lines up with the
+   PID text instead of sitting high on the text baseline */
+.checkbox-white-space > span:first-child {
   display: inline-flex;
-    cursor: pointer;
-    position: relative;
+  align-items: center;
+
+  > .checkbox-design {
+    margin: auto 0;
+  }
 }
 
-.checkbox-design > span {
-  padding: 0.25rem 0.25rem;
-}
-
-.checkbox-design > input {
-  height: 12px;
-  width: 12px;
+/* -------------------------------------------------------------------------
+   Single, reusable checkbox — applied to EVERY native checkbox. Unchecked:
+   white box, grey border. Checked: bright-blue fill (@blue) with a crisp white
+   SVG checkmark. Kept identical to CANcloud so the editor looks the same in
+   both parent apps.
+   ------------------------------------------------------------------------- */
+input[type="checkbox"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
+  width: 12px;
+  height: 12px;
+  margin: 0;
   border: 1px solid #8e8e8e;
   border-radius: 2px;
-  background-color:white;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px;
   cursor: pointer;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
-.checkbox-design > input:checked {
-  border: 1px solid #8e8e8e;
-  background-color:white;
+input[type="checkbox"]:checked {
+  background-color: @blue;
+  border-color: @blue;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8l3 3 5-6'/%3E%3C/svg%3E");
 }
 
-
-.checkbox-design > input:checked + span::before {
-  content: '\2713';
-  display: block;
-  text-align: center;
-  color: #8e8e8e;
-  position: absolute;
-  left: 0.2rem;
-  top: 0.2rem;
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: none;
 }
 
-.checkbox-design > input:active {
-  border: 1px solid #8e8e8e;
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* .checkbox-design is now just a layout wrapper (box + optional caption) */
+.checkbox-design {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.checkbox-design > span {
+  padding: 0.25rem 0.25rem;
 }
 
 
@@ -549,6 +601,16 @@
   padding: 15px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.tools-side-bar-expanded {
+  width: 50% !important;
+  min-width: 320px;
+}
+
+.expand-toggle {
+  right: 45px;
+  top: 15px;
 }
 
 .btn-field-description {
@@ -625,6 +687,12 @@
 .field-description-shift {
   margin-right: 340px;
   bottom:35px;
+}
+
+/* tool-button hover tooltips (config-bar) must clear the fixed config-bar
+   (~60px tall) instead of overlapping it at the bottom */
+.btn-field-description.field-description-shift {
+  bottom: 75px;
 }
 
 .field-integer:hover .field-description {

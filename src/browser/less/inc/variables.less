@@ -6,7 +6,7 @@
 @body-bg : #edecec;
 @text-color : #8e8e8e;
 @font-size-base : 15px;
-@link-color : #46a5e0;
+@link-color : @blue; // single bright-blue source (see @blue below)
 @link-hover-decoration : none;
 @navbar-default-bg : @white;
 @navbar-default-border : @white;
@@ -38,11 +38,12 @@
 @grey : #f5f5f5;
 @mediumgrey : #e6e6e6;
 @dark-blue : #0084d3;
-@blue-css:#3d85c6;
-@blue : #00a6f7;
+@blue-css: @blue; // alias of the single bright-blue source (@blue)
 @white : #ffffff;
 @black : #1b1e25;
-@blue : #50b2ff;
+// single source of truth for the app-wide bright blue (buttons, tabs, links,
+// accents). Change here to restyle all CSS blue in one place.
+@blue : #46a5e0;
 @light-blue : #c1d1e8;
 @green : #33d46f;
 @yellow : #FFC107;
