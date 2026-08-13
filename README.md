@@ -9,21 +9,27 @@ See also our [documentation](https://www.csselectronics.com/screen/page/can-logg
 ----
 
 ## How to install
-Clone this repository and run `npm install`. 
+Requires Node >= 20 (developed on Node 24). Clone this repository and run
+`npm install` (peer-dependency quirks of some legacy packages are handled via
+the committed `.npmrc`).
 
 ----
 
-## How to build
-The config editor supports building various editor variants:
+## How to run and build
+Development server (hot reload):
 ```
-npm run canedge 
-npm run canmod 
-...
+npm start             # CANedge variant
+npm run start:canmod  # CANmod variant
 ```
 
-For a list of available builds, see the `package.json` scripts list. 
+Production builds (each produces a single self-contained `index.html` that can
+be opened directly from disk):
+```
+npm run canedge   -> canedge-editor/index.html
+npm run canmod    -> canmod-editor/index.html
+```
 
-For each build, the `TYPE` variable can be used within the `Editor.js` file to change settings - e.g. modifying the title, which schema files to use and which editor tools to include.
+For each build, the `TYPE` variable can be used within the `Editor.js` file to change settings - e.g. modifying the title, which schema files to use and which editor tools to include. The `DEMO_MODE` environment variable is injected the same way (see `build-canedge-demo.bat`).
 
 ----
 

@@ -17,6 +17,10 @@
 //     Bootstrap (added specifically for the device editor)
 // -----------------------------*/
 @import "../../../node_modules/bootstrap/less/glyphicons.less";
+// bootstrap's default @icon-font-path ("../fonts/") survives into the CSS
+// unresolved under Vite (webpack rewrote it) -> glyphicons render as tofu
+// boxes. Point it at the real font dir so Vite bundles/inlines the font.
+@icon-font-path: "../../../node_modules/bootstrap/fonts/";
 @import "../../../node_modules/bootstrap/less/forms.less";
 @import "../../../node_modules/bootstrap/less/mixins/forms.less";
 @import "../../../node_modules/bootstrap/less/buttons.less";
