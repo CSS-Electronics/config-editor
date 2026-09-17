@@ -7,3 +7,6 @@ analyse.js
 canedge-editor/*
 gps-editor/*
 *.bat
+# built single-file editors (produce with npm run canedge / canmod)
+canedge-editor/index.html
+canmod-editor/index.html
